@@ -5,12 +5,12 @@
 
 /* Track */
 ::-webkit-scrollbar-track {
-	background: #151580;
+	background: #000000;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-	background: #4fadec;
+	background: #077a24;
 }
 
 /*---------------=========== page scrollbar end ===============-------*/
@@ -23,7 +23,7 @@
   vertical-align: middle;
   -webkit-transform: perspective(1px) translateZ(0);
   transform: perspective(1px) translateZ(0);
-  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.144);
   -webkit-transition-duration: 0.3s;
   transition-duration: 0.3s;
   -webkit-transition-property: box-shadow, transform;
@@ -32,7 +32,7 @@
   margin-top:5%;
 }
 .hvr-grow-shadow:hover, .hvr-grow-shadow:focus, .hvr-grow-shadow:active {
-  box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 10px 10px -10px rgb(6, 75, 12);
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }
@@ -41,9 +41,9 @@
 # General
 --------------------------------------------------------------*/
 body {
-  background: #ffffff;
-  color: #898989;
-  font-family: 'Poppins', helvetica;
+  background: #0e0101;
+  color: #dddddd;
+  font-family: 'Poppins', sans-serif;
   font-size: 15px;
   font-weight: 300;
   line-height: 20px;
@@ -61,7 +61,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h2 {
-  color: #292929;
+  color: #dddddd;
   font-weight: 600;
 }
 
@@ -148,10 +148,10 @@ p {
 }
 
 .form-control {
-  background-color: transparent;
-  border: 1px solid #999;
+  background-color: #c5e4c7;
+  border: 1px solid rgb(75, 9, 9);
   border-radius: 0;
-  color: #999999;
+  color: #301515;
   font-size: 12px;
   font-weight: 500;
   height: 50px;
@@ -182,7 +182,7 @@ p {
 }
 
 .hvr-shutter-in-horizontal:hover {
-  background: #b8a07e;
+  background: #80c285;
 }
 
 .mb-30 {
@@ -194,7 +194,7 @@ p {
 --------------------------------------------------------------*/
 nav {
   position: fixed;
-  background: #fff;
+  background: #0a1801d7;
   z-index: 1000;
   width: 100%;
   padding: 20px;
@@ -253,7 +253,7 @@ nav ul li a {
 # Hero
 --------------------------------------------------------------*/
 #hero {
-  background: url("../../img/home.webp") repeat scroll center center/cover;
+  background: url("../../img/home_bg.jpg") repeat scroll center center/cover;
   height: 100vh;
   width: 100%;
 }
@@ -296,18 +296,18 @@ nav ul li a {
 }
 
 /*-----------------------------------------------------------------------------------*/
-/*  Aout
+/*  About
 /*-----------------------------------------------------------------------------------*/
 #about {
   width: 100%;
   height: auto;
-  background: #f7f7f7;
+  background: #181717;
   padding-top: 190px;
 }
 
 #about .div-img-bg {
   padding-bottom: 30px;
-  border: 20px solid #b8a07e;
+  border: 20px solid #80c285;
 }
 
 #about .div-img-bg .about-img img {
@@ -336,7 +336,7 @@ nav ul li a {
 # Services
 --------------------------------------------------------------*/
 #services {
-  background: #f7f7f7;
+  background: #181717;
   position: relative;
   padding-bottom: 80px;
 }
@@ -364,7 +364,7 @@ nav ul li a {
 
 .services-block i {
   font-size: 44px;
-  color: #b8a07e;
+  color: #80c285;
   line-height: 44px;
 }
 
@@ -390,7 +390,7 @@ nav ul li a {
 }
 
 .services-carousel .owl-dot.active {
-  background-color: #b8a07e;
+  background-color: #80c285;
 }
 
 .owl-nav {
