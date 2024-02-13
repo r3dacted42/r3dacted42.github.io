@@ -1,4 +1,4 @@
-name: portfolio
+name: fl_source
 description: "Portfolio"
 publish_to: 'none'
 version: 0.1.0
@@ -9,6 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  google_fonts: ^6.1.0
+  flutter_carousel_widget: ^2.2.0
 
 dev_dependencies:
   flutter_test:
