@@ -1,3 +1,3 @@
 # fl_source
 
-A new Flutter project.
+Source code for the static gh pages website :)
