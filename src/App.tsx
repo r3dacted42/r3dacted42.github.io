@@ -13,7 +13,7 @@ function App() {
         </button>
       </div>
       <p className="read-the-docs">
-        Click <a href="https://r3dacted42.github.io/resume/resume.pdf">here</a> to download my resume.
+        Click <a href="https://r3dacted42.github.io/resume/resume.pdf" target='_blank'>here</a> to download my resume.
       </p>
     </>
   )
