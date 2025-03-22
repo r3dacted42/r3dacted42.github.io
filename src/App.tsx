@@ -1,21 +1,19 @@
-import { useState } from 'react'
-import './App.css'
+import { Canvas } from '@react-three/fiber'
+import MenuBoxItem from './components/MenuBoxItem'
+import { OrbitControls } from '@react-three/drei'
 
 function App() {
-  const [count, setCount] = useState(0)
 
+  
   return (
-    <>
-      <h1>Under Construction</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-      </div>
-      <p className="read-the-docs">
-        Click <a href="https://r3dacted42.github.io/resume/resume.pdf" target='_blank'>here</a> to download my resume.
-      </p>
-    </>
+    <Canvas camera={{fov: 100, position: [0, 0, 5]}}>
+      <ambientLight intensity={Math.PI / 2} />
+      <spotLight position={[10, 10, 0]} angle={Math.PI / 2} penumbra={1} decay={0} intensity={Math.PI * 2} />
+      {/* <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} /> */}
+      <MenuBoxItem position={[-1, 0, -10]} />
+      <MenuBoxItem position={[1, 0, -10]} />
+      <OrbitControls />
+    </Canvas>
   )
 }
 
