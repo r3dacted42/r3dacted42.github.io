@@ -1,21 +1,33 @@
-import { useState } from 'react'
-import './App.css'
+import { Route, Routes, useLocation } from 'react-router-dom';
+import './App.css';
+import MenuItem from './components/MenuItem';
+import ThemeButton from './components/ThemeButton';
+import ProjectList from './routes/ProjectList';
+import About from './routes/About';
+import Project from './routes/Project';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const location = useLocation();
 
   return (
-    <>
-      <h1>Under Construction</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
+    <main>
+      <div className='menu'>
+        {
+          location.pathname !== '/' &&
+          <MenuItem route='/'>/</MenuItem>
+        }
+        <MenuItem route='projects'>projects</MenuItem>
+        <MenuItem route='resume'>resume</MenuItem>
+        <MenuItem route='about'>about</MenuItem>
       </div>
-      <p className="read-the-docs">
-        Click <a href="https://r3dacted42.github.io/resume/resume.pdf" target='_blank'>here</a> to download my resume.
-      </p>
-    </>
+      <Routes>
+        <Route path='/' element={<></>} />
+        <Route path='/projects/:repo' element={<Project />} />
+        <Route path='/projects' element={<ProjectList />} />
+        <Route path='/about' element={<About />} />
+      </Routes>
+      <ThemeButton />
+    </main>
   )
 }
 
