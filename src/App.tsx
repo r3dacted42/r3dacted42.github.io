@@ -9,16 +9,22 @@ import Project from './routes/Project';
 function App() {
   const location = useLocation();
 
+  const Spacer = () => { return (<div style={{ flexGrow: 1 }}></div>); }
+
   return (
     <main>
       <div className='menu'>
         {
-          location.pathname !== '/' &&
-          <MenuItem route='/'>/</MenuItem>
+          location.pathname !== '/'
+            ? <MenuItem route='/'>..</MenuItem>
+            : <a className='menu-item' style={{ color: '#0000', userSelect: 'none' }}>..</a>
         }
-        <MenuItem route='projects'>projects</MenuItem>
-        <MenuItem route='resume'>resume</MenuItem>
-        <MenuItem route='about'>about</MenuItem>
+        <span>
+          <MenuItem route='projects'></MenuItem>
+          <MenuItem url='https://r3dacted42.github.io/resume/'>resume</MenuItem>
+          <MenuItem route='about'></MenuItem>
+        </span>
+        <ThemeButton />
       </div>
       <Routes>
         <Route path='/' element={<></>} />
@@ -26,7 +32,6 @@ function App() {
         <Route path='/projects' element={<ProjectList />} />
         <Route path='/about' element={<About />} />
       </Routes>
-      <ThemeButton />
     </main>
   )
 }

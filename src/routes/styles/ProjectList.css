@@ -1,0 +1,11 @@
+.list {
+    flex-grow: 1;
+    padding: 8px;
+}
+
+.list-item {
+    display: inline-block;
+    height: min-content;
+    text-wrap: nowrap;
+    margin: 4px;
+}

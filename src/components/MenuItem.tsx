@@ -1,20 +1,29 @@
 import { ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import './styles/MenuItem.css';
 
 export interface MenuItemProps {
-    route: string;
+    route?: string;
+    url?: string;
     children?: ReactNode;
 }
 
 function MenuItem(props: MenuItemProps) {
-    const { route, children} = props;
-    
+    const { route, url, children } = props;
+    const location = useLocation();
+    const atRoute = location.pathname === `/${route}`;
+
+    if (url) {
+        return (
+            <a href={url} target="_blank" className="menu-item">{children}</a>
+        );
+    }
+
     return (
-        <Link className="menu-item" to={route}>
+        <Link className={`menu-item ${atRoute ? "active" : ""}`} to={route!}>
             {children || route}
         </Link>
-    )
+    );
 }
 
 export default MenuItem;

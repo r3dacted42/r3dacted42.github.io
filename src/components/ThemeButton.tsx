@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { MdContrast, MdDarkMode, MdLightMode } from "react-icons/md";
-import './styles/ThemeButton.css';
+import './styles/MenuItem.css';
 enum Themes { System, Light, Dark };
 
 function ThemeButton() {
@@ -22,18 +21,18 @@ function ThemeButton() {
 
     const iconComp = () => {
         if (theme === Themes.System) {
-            return <MdContrast />;
+            return "contrast";
         } else if (theme === Themes.Light) {
-            return <MdLightMode />;
+            return "light_mode";
         } else {
-            return <MdDarkMode />;
+            return "dark_mode";
         }
     }
 
     return (
-        <button className="theme-button" onClick={onClick}>
+        <a href="#!" style={{ fontFamily: 'Material Icons' }} className="menu-item" onClick={onClick}>
             {iconComp()}
-        </button>
+        </a>
     );
 }
 

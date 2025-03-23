@@ -1,0 +1,17 @@
+[
+    {
+        "name": "maxwell the cat appreciation page",
+        "repo": "maxwell",
+        "gh_pages": true
+    },
+    {
+        "name": "bank management system",
+        "repo": "bank-mgmt-sys",
+        "gh_pages": false
+    },
+    {
+        "name": "turtle graphics webgl",
+        "repo": "turtle-graphics",
+        "gh_pages": true
+    }
+]
