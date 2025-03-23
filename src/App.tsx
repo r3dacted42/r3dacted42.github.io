@@ -9,8 +9,6 @@ import Project from './routes/Project';
 function App() {
   const location = useLocation();
 
-  const Spacer = () => { return (<div style={{ flexGrow: 1 }}></div>); }
-
   return (
     <main>
       <div className='menu'>
