@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import MenuItem from './components/MenuItem';
 import ProjectList from './routes/ProjectList';
@@ -9,7 +9,6 @@ import useLocalStorage from 'use-local-storage';
 function App() {
   const defaultDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   const [theme, setTheme] = useLocalStorage('theme', defaultDark ? 'dark' : 'light');
-  const location = useLocation();
 
   return (
     <div className='app' data-theme={theme}>
