@@ -11,7 +11,7 @@ export interface MenuItemProps {
 function MenuItem(props: MenuItemProps) {
     const { route, url, children } = props;
     const location = useLocation();
-    const atRoute = location.pathname === `/${route}`;
+    const atRoute = location.pathname === `/${route === '/' ? '' : route}`;
 
     if (url) {
         return (
