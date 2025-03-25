@@ -8,4 +8,8 @@
     height: min-content;
     text-wrap: nowrap;
     margin: 4px;
+    
+    i {
+        font-size: 1.1em;
+    }
 }
