@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import './styles/Project.css';
 import Markdown from "markdown-to-jsx";
+import LoadingIndicator from "../components/LoadingIndicator";
 
 function Project() {
     const { repo } = useParams();
@@ -24,7 +25,7 @@ function Project() {
         <div id="content">
             {loaded
                 ? <Markdown>{readme}</Markdown>
-                : "loading..."
+                : <LoadingIndicator />
             }
         </div>
     );

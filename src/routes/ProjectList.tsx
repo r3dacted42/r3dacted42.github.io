@@ -1,30 +1,81 @@
 import { Link } from 'react-router-dom';
-import projectsData from '../assets/projects.json';
 import './styles/ProjectList.css';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '../store';
+import { fetchRepoInfo } from '../store/reposSlice';
+import projectsData from '../data/projects';
+import langIconMap from '../data/lang_icon_map';
+import { isExpired } from '../utils';
+import LoadingIndicator from '../components/LoadingIndicator';
 
 function ProjectList() {
-    const [projectsDesc, setDesc] = useState<Array<string>>([]);
+    const dispatch = useDispatch<AppDispatch>();
+
+    const reposState = useSelector((state: RootState) => state.repos);
+
+    const displayProjects = projectsData.map(p => ({
+        name: p.name,
+        repo: p.repo,
+        reduxState: reposState[p.repo] || { status: 'idle', error: null, info: null }
+    }));
 
     useEffect(() => {
-        const apiUrl = (r: string) => `https://api.github.com/repos/r3dacted42/${r}/languages`;
-        Promise.all(projectsData.map((d) => fetch(apiUrl(d.repo))))
-            .then((r) => Promise.all(r.map((res) => res.json())))
-            .then((data) => data.map((d) => Object.keys(d)[0] as string))
-            .then((l) => {
-                console.log(l);
-                setDesc(l);
-            });
-    }, []);
+        projectsData.forEach(p => {
+            const currentRepoState = reposState[p.repo];
+            if (!currentRepoState || currentRepoState.status === 'idle'
+                || currentRepoState.status === 'failed'
+                || (currentRepoState.status === 'ready'
+                    && currentRepoState.info
+                    && isExpired(currentRepoState.info.validUntil)
+                )
+            ) {
+                dispatch(fetchRepoInfo(p.repo));
+            }
+        });
+    }, [dispatch, reposState]);
+
+    const getIcon = (lang: string) => {
+        lang = lang.toLowerCase();
+        if (Object.keys(langIconMap).includes(lang)) {
+            lang = langIconMap[lang];
+        }
+        return `devicon-${lang}-plain`;
+    };
 
     return (
         <div className='list'>
-            {projectsData.map((d, idx) => (
-                <Link key={idx} className='list-item' to={`/projects/${d.repo}`}>
-                    {d.name} {projectsDesc.length > 0 ? <i title={projectsDesc[idx]}
-                        className={`devicon-${projectsDesc[idx].toLowerCase()}-plain`}></i> : "..."}
-                </Link>
-            ))}
+            {displayProjects.map((d, idx) => {
+                const { name, repo, reduxState } = d;
+                const { status, info, error } = reduxState;
+
+                if (status === 'ready' && info) {
+                    return (
+                        <Link
+                            key={idx}
+                            className='list-item'
+                            to={`/projects/${repo}`}
+                            title={info.description}
+                        >
+                            {name} {info.languages.map((l, i) => (
+                                <span key={i} title={l} className={getIcon(l)} />
+                            ))}
+                        </Link>
+                    );
+                } else if (status === 'failed') {
+                    return (
+                        <div key={idx} className="list-item error">
+                            {name} !!Error: {error || 'Failed to load'}
+                        </div>
+                    );
+                } else {
+                    return (
+                        <div key={idx} className="list-item">
+                            <LoadingIndicator />
+                        </div>
+                    );
+                }
+            })}
         </div>
     );
 }
