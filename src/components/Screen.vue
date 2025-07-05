@@ -56,6 +56,7 @@ const barStyle = computed(() => {
     height: 100%;
     display: flex;
     flex-direction: column;
+    align-items: stretch;
 }
 .flex-row {
     display: flex;
