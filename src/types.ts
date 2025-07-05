@@ -8,4 +8,5 @@ export interface WindowState {
     title: string,
     isActive: boolean,
     isMinimized: boolean,
+    isMaximized: boolean,
 };

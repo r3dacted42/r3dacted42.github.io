@@ -5,6 +5,7 @@ import type { WindowState } from '../types';
 export const useWindowsStore = defineStore('windows', () => {
   const windows = ref<WindowState[]>([]);
   const activeWindow = computed(() => windows.value.find(w => w.isActive));
+  const maximizedWindow = computed(() => windows.value.find(w => w.isMaximized));
   const minimizedWindows = computed(() => windows.value.filter(w => w.isMinimized));
 
   function addWindow(state: WindowState) {
@@ -30,12 +31,22 @@ export const useWindowsStore = defineStore('windows', () => {
     }
   }
 
+  function toggleMaximize(id: string) {
+    const window = windows.value.find(w => w.id === id);
+    if (window) {
+        window.isMaximized = !window.isMaximized;
+        if (!window.isMaximized) setActiveWindow(id);
+    }
+  }
+
   return {
     windows,
     activeWindow,
+    maximizedWindow,
     minimizedWindows,
     addWindow,
     setActiveWindow,
     toggleMinimize,
+    toggleMaximize,
   };
 });
