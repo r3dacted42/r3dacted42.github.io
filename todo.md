@@ -1,0 +1,1 @@
+- add screensaver on no mouse movement for 30 seconds
