@@ -1,27 +1,49 @@
 <script setup lang="ts">
 import Screen from './components/Screen.vue';
 import Window from './components/Window.vue';
-import { colors } from './constants';
+import { colors, snapX, snapY } from './constants';
 </script>
 
 <template>
   <Screen :style="{ color: 'blueBlack' }">
-    <div id="construction-panel" class="tui-panel">
-      <div class="tui-panel-content">
-        UNDER CONSTRUCTION ^._.^
+    <template #nav-li>
+      <li>hehe</li>
+      <li>heha</li>
+      <li>haha</li>
+      <li><a href="https://r3dacted42.github.io/resume" target="_blank">resume</a></li>
+    </template>
+    <template #windows>
+      <div id="construction-panel" class="tui-panel">
+        <div class="tui-panel-content">
+          <pre>⠀⠀⠀⢠⣾⣷⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⣰⣿⣿⣿⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⢰⣿⣿⣿⣿⣿⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣤⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣤⣄⣀⣀⣤⣤⣶⣾⣿⣿⣿⡷
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠁
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠁⠀
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠏⠀⠀⠀
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠏⠀⠀⠀⠀
+⣿⣿⣿⡇⠀⡾⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠁⠀⠀⠀⠀⠀
+⣿⣿⣿⣧⡀⠁⣀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⠉⢹⠉⠙⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣀⠀⣀⣼⣿⣿⣿⣿⡟⠀⠀⠀⠀⠀⠀⠀
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠋⠀⠀⠀⠀⠀⠀⠀⠀
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠛⠀⠤⢀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⣿⣿⣿⣿⠿⣿⣿⣿⣿⣿⣿⣿⠿⠋⢃⠈⠢⡁⠒⠄⡀⠈⠁⠀⠀⠀⠀⠀⠀⠀
+⣿⣿⠟⠁⠀⠀⠈⠉⠉⠁⠀⠀⠀⠀⠈⠆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⠀⠀⠀⠀⠀⠀  r3dacted42</pre>
+        </div>
       </div>
-    </div>
-    <Window window-id="hi" window-title="hi :)" :initial-position="{ x: 40, y: 40 }"
-      :style="{ bgColor: colors.cyan.a8 }" :can-maximize="true">
-      welcome to my portfolio!<br><br>
-      <div class="center">
-        <a :class="`tui-button ${colors.orange.ff}`" href="https://r3dacted42.github.io/resume"
-          target="_blank">resume</a>
-      </div>
-    </Window>
-    <Window window-id="cat" window-title="meow" :initial-position="{ x: 60, y: 105 }"
-      :style="{ bgColor: colors.purple.a8 }" :can-maximize="true">
-      <pre>⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+      <Window window-id="hi" window-title="hi :)" :initial-position="{ x: snapX * 3, y: snapY * 3 }"
+        :style="{ bgColor: colors.cyan.a8 }" :can-maximize="true">
+        welcome to my portfolio!
+      </Window>
+      <Window window-id="cat" window-title="meow" :initial-position="{ x: snapX * 7, y: snapY * 10 }"
+        :style="{ bgColor: colors.purple.a8 }" :can-maximize="true" :show-pos="true">
+        <pre>⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿
 ⣿⣿⣿⣿⣿⣿⡿⢟⠿⣿⣿⣿⣿⣿⣿⣿⣿⡟⣡⣿⣷⣌⡻⣿⣿⣿⣿⣿⣿⣿
 ⣿⣿⣿⣿⡿⢋⣴⣿⣷⣝⣿⣿⣿⣿⣿⣿⢋⣼⣿⣿⣿⣿⣿⣌⢻⣿⣿⣿⣿⣿
 ⣿⣿⣿⠟⣴⣿⣿⣿⣿⣭⣤⣦⣤⣴⣮⣴⣿⣿⣿⣿⣿⣿⣿⣿⣦⠹⣿⣿⣿⣿
@@ -36,7 +58,8 @@ import { colors } from './constants';
 ⣿⣿⣿⣿⣿⣿⡇⣾⣿⣿⡶⢠⣶⣶⣶⣶⣶⣶⣾⣿⣿⡿⢋⣼⣿⣿⣿⣿⣿⣿
 ⣿⣿⣿⣿⣿⣿⣧⡛⠿⠟⣰⣿⣿⣿⣿⣿⣿⣛⡛⢩⣵⣶⣿⡋⡙⠛⣋⢹⣿⣿
 ⣿⢿⣿⣿⣿⣿⣿⣿⣿⢰⣿⣿⣿⣿⣿⣿⣿⣿⡇⣸⣿⣿⡿⢃⣽⣿⣧⡘⢿⣿</pre>
-    </Window>
+      </Window>
+    </template>
   </Screen>
 </template>
 

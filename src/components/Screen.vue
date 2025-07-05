@@ -29,16 +29,22 @@ const barStyle = computed(() => {
     };
     return style;
 });
+
+const resetPage = () => {
+    localStorage.clear();
+    location.reload();
+};
 </script>
 
 <template>
     <div class="screen" :class="screenClass">
         <nav class="tui-nav" :style="barStyle">
             <ul class="flex-row">
-                <li>reset</li>
+                <slot name="nav-li"></slot>
+                <li v-on:click="resetPage">reset</li>
             </ul>
         </nav>
-        <slot></slot>
+        <slot name="windows"></slot>
         <div class="tui-statusbar" :style="barStyle">
             <ul class="flex-row">
                 <li class="minimized" v-for="win in windowsStore.minimizedWindows" v-on:click="restoreWindow(win.id)">

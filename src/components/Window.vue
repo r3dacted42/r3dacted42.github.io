@@ -2,7 +2,7 @@
 import { computed, onMounted, ref, useTemplateRef, type CSSProperties } from 'vue';
 import { colors, snapX, snapY } from '../constants';
 import { useDraggable, useEventListener, useStorage } from '@vueuse/core';
-import { clampRound } from '../utils';
+import { clamp } from '../utils';
 import type { WindowStyle } from '../types';
 import { useWindowsStore } from '../stores/windows';
 
@@ -13,6 +13,7 @@ const props = defineProps({
     minSize: { type: Object as () => { width: number, height: number } },
     canMaximize: { type: Boolean },
     style: { type: Object as () => WindowStyle },
+    showPos: { type: Boolean },
 });
 
 const bgColor = props.style?.bgColor ?? colors.blue.a8;
@@ -22,22 +23,25 @@ ${props.style?.fgColor ?? colors.white.ff}-text`;
 const position = useStorage(`${props.windowId}-pos`, props.initialPosition, localStorage);
 const minSize = ref({ width: 0, height: 0 });
 
-const window = useTemplateRef<HTMLElement>('window');
-const handle = useTemplateRef<HTMLElement>('handle');
+const windowRef = useTemplateRef<HTMLElement>('window');
+const handleRef = useTemplateRef<HTMLElement>('handle');
 const windowsStore = useWindowsStore();
 const state = computed(() => windowsStore.windows.find(w => w.id === props.windowId));
 
-useEventListener(window, 'pointerdown', () => {
+useEventListener(windowRef, 'pointerdown', () => {
     windowsStore.setActiveWindow(props.windowId);
 });
 
-useDraggable(window, {
-    handle: handle,
+useDraggable(windowRef, {
+    handle: handleRef,
     preventDefault: true,
     onMove(cursorPos, _event) {
+        if (!windowRef.value) return;
+        const maxX = document.documentElement.clientWidth - windowRef.value?.clientWidth;
+        const maxY = document.documentElement.clientHeight - windowRef.value?.clientHeight - 22;
         position.value = {
-            x: clampRound(cursorPos.x / snapX) * snapX,
-            y: clampRound(cursorPos.y / snapY) * snapY,
+            x: clamp(Math.round(cursorPos.x / snapX) * snapX, 0, maxX),
+            y: clamp(Math.round(cursorPos.y / snapY) * snapY, 22, maxY),
         };
     },
 });
@@ -52,11 +56,17 @@ onMounted(() => {
     });
     if (props.minSize) {
         minSize.value = props.minSize;
-    } else if (window.value) {
+    } else if (windowRef.value) {
         minSize.value = {
-            width: window.value.clientWidth,
-            height: window.value.clientHeight,
+            width: Math.round((windowRef.value.clientWidth + snapX / 3) / snapX) * snapX,
+            height: Math.round((windowRef.value.clientHeight + snapY / 3) / snapY) * snapY,
         };
+        if (minSize.value.width > windowRef.value.clientWidth) {
+            windowRef.value.style.width = `${minSize.value.width}px`;
+        }
+        if (minSize.value.height > windowRef.value.clientHeight) {
+            windowRef.value.style.height = `${minSize.value.height}px`;
+        }
     }
 });
 
@@ -68,24 +78,30 @@ const onMaximize = () => {
 };
 
 const windowStyle = computed(() => {
-    console.log(minSize.value);
-    const style: CSSProperties = state.value?.isMaximized
-        ? {
-            position: 'relative',
-            resize: 'none',
-            flexGrow: 1,
-            zIndex: '2000',
-        }
-        : {
+    let style: CSSProperties = {
             position: 'absolute',
             resize: 'both',
+            overflow: 'hidden',
             display: state.value?.isMinimized ? 'none' : undefined,
             left: `${position.value.x}px`,
             top: `${position.value.y}px`,
-            minWidth: minSize.value.width,
-            minHeight: minSize.value.height,
+            minWidth: `${minSize.value.width}px`,
+            minHeight: `${minSize.value.height}px`,
+            textWrap: 'nowrap',
             zIndex: state.value?.isActive ? '1000' : undefined,
         };
+    if (state.value?.isMaximized) {
+        style = {
+            ...style,
+            position: 'relative',
+            resize: 'none',
+            flexGrow: 1,
+            left: 0,
+            top: 0,
+            width: '100%',
+            zIndex: '2000',
+        };
+    }
     return style;
 });
 </script>
@@ -102,7 +118,7 @@ const windowStyle = computed(() => {
                 <span class="green-255-text">{{ state?.isMaximized ? '&darr;' : '&uarr;' }}</span>
             </button>
             <slot></slot>
-            <div class="tui-fieldset-text right">{{ position.x }}, {{ position.y }}</div>
+            <div v-if="showPos" class="tui-fieldset-text right">{{ position.x }}, {{ position.y }}</div>
         </fieldset>
     </div>
 </template>
