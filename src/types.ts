@@ -6,7 +6,7 @@ export interface WindowStyle {
 export interface WindowState {
     id: string,
     title: string,
-    isActive: boolean,
+    zIndex: number,
     isMinimized: boolean,
     isMaximized: boolean,
 };

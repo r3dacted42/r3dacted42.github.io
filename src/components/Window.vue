@@ -56,7 +56,8 @@ useResizeObserver(windowResizerRef, (entries) => {
     if (state.value?.isMaximized || !isBeingResized.value) return;
     const windowResizer = entries[0];
     const { width, height } = windowResizer.contentRect;
-    if (!state.value?.isActive) windowsStore.setActiveWindow(props.windowId);
+    if (windowsStore.activeWindow?.id !== props.windowId) 
+        windowsStore.setActiveWindow(props.windowId);
     size.value = {
         width: Math.floor((width + 0.1) / snapX) * snapX,
         height: Math.floor((height + 0.1) / snapY) * snapY,
@@ -78,12 +79,10 @@ onMounted(() => {
     windowsStore.addWindow({
         id: props.windowId,
         title: props.windowTitle,
-        isActive: false,
+        zIndex: 1,
         isMinimized: false,
         isMaximized: false,
     });
-    if (windowsStore.lastActiveWindowId == props.windowId)
-        windowsStore.setActiveWindow(props.windowId);
     if (props.minSize) {
         minSize.value = props.minSize;
         if (size.value.width == 0 || size.value.height == 0)
@@ -118,7 +117,7 @@ const windowResizerStyle = computed(() => {
         top: `${position.value.y}px`,
         minWidth: `${minSize.value.width + shadowW}px`,
         minHeight: `${minSize.value.height + shadowW}px`,
-        zIndex: state.value?.isActive ? '1000' : undefined,
+        zIndex: state.value?.zIndex,
     };
     if (state.value?.isMaximized) {
         style = {
@@ -129,7 +128,7 @@ const windowResizerStyle = computed(() => {
             left: 0,
             top: 0,
             width: '100%',
-            zIndex: '2000',
+            zIndex: windowsStore.maxZIdx + 1,
             padding: 'unset',
         };
     }
@@ -141,14 +140,12 @@ const windowStyle = computed(() => {
         display: state.value?.isMinimized ? 'none' : undefined,
         width: windowResizerRef.value ? `${size.value.width}px` : undefined,
         height: windowResizerRef.value ? `${size.value.height}px` : undefined,
-        zIndex: state.value?.isActive ? '1000' : undefined,
     };
     if (state.value?.isMaximized) {
         style = {
             ...style,
             width: '100%',
             height: '100%',
-            zIndex: '2000',
         };
     }
     return style;

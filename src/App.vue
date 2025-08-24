@@ -10,7 +10,7 @@ import { colors, snapX, snapY } from './constants';
       <li><a href="https://r3dacted42.github.io/resume" target="_blank">resume</a></li>
     </template>
     <template #windows>
-      <div id="construction-panel" class="tui-panel">
+      <div id="logo-panel" class="tui-panel">
         <div class="tui-panel-content">
           <pre>⠀⠀⠀⢠⣾⣷⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⣰⣿⣿⣿⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -61,7 +61,7 @@ import { colors, snapX, snapY } from './constants';
 </template>
 
 <style scoped>
-#construction-panel {
+#logo-panel {
   position: absolute;
   left: 50vw;
   top: 50vh;
