@@ -7,9 +7,6 @@ import { colors, snapX, snapY } from './constants';
 <template>
   <Screen :style="{ color: 'blueBlack' }">
     <template #nav-li>
-      <li>hehe</li>
-      <li>heha</li>
-      <li>haha</li>
       <li><a href="https://r3dacted42.github.io/resume" target="_blank">resume</a></li>
     </template>
     <template #windows>

@@ -1,8 +1,14 @@
+html {
+  /* https://github.com/D3nn7/crt-css */
+  animation-duration: 0.01s;
+  animation-name: textflicker;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
 html,
 body,
 #app {
-  margin: 0;
-  padding: 0;
   height: 100%;
   background-color: black;
   overflow: hidden;
@@ -10,4 +16,16 @@ body,
 
 * {
   user-select: none;
+  margin: 0;
+  padding: 0;
+}
+
+@keyframes textflicker {
+  from {
+    text-shadow: 1px 0 0 #ea36af, -2px 0 0 #75fa69;
+  }
+
+  to {
+    text-shadow: 2px 0.5px 2px #ea36af, -1px -0.5px 2px #75fa69;
+  }
 }

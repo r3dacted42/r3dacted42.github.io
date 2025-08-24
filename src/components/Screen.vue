@@ -64,10 +64,12 @@ const resetPage = () => {
     flex-direction: column;
     align-items: stretch;
 }
+
 .flex-row {
     display: flex;
     flex-direction: row;
 }
+
 .minimized {
     cursor: pointer;
     background-color: gray;

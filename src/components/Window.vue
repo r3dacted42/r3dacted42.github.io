@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, useTemplateRef, type CSSProperties } from 'vue';
 import { colors, snapX, snapY } from '../constants';
-import { useDraggable, useEventListener, useStorage } from '@vueuse/core';
+import { useDraggable, useEventListener, useResizeObserver, useStorage } from '@vueuse/core';
 import { clamp } from '../utils';
 import type { WindowStyle } from '../types';
 import { useWindowsStore } from '../stores/windows';
@@ -17,14 +17,19 @@ const props = defineProps({
 });
 
 const bgColor = props.style?.bgColor ?? colors.blue.a8;
-const windowClass = `tui-window ${bgColor} \
+const windowClass = `tui-window window ${bgColor} \
 ${props.style?.fgColor ?? colors.white.ff}-text`;
 
 const position = useStorage(`${props.windowId}-pos`, props.initialPosition, localStorage);
 const minSize = ref({ width: 0, height: 0 });
+const size = useStorage(`${props.windowId}-sz`, props.minSize ?? {
+    width: 0,
+    height: 0,
+}, localStorage);
 
-const windowRef = useTemplateRef<HTMLElement>('window');
-const handleRef = useTemplateRef<HTMLElement>('handle');
+const windowResizerRef = useTemplateRef<HTMLDivElement>('windowResizer');
+const windowRef = useTemplateRef<HTMLDivElement>('window');
+const handleRef = useTemplateRef<HTMLDivElement>('handle');
 const windowsStore = useWindowsStore();
 const state = computed(() => windowsStore.windows.find(w => w.id === props.windowId));
 
@@ -46,6 +51,17 @@ useDraggable(windowRef, {
     },
 });
 
+useResizeObserver(windowResizerRef, (entries) => {
+    if (state.value?.isMaximized) return;
+    const windowResizer = entries[0];
+    const { width, height } = windowResizer.contentRect;
+    if (!state.value?.isActive) windowsStore.setActiveWindow(props.windowId);
+    size.value = {
+        width: Math.round(width / snapX) * snapX,
+        height: Math.round(height / snapY) * snapY,
+    };
+});
+
 onMounted(() => {
     windowsStore.addWindow({
         id: props.windowId,
@@ -56,11 +72,15 @@ onMounted(() => {
     });
     if (props.minSize) {
         minSize.value = props.minSize;
+        if (size.value.width == 0 || size.value.height == 0)
+            size.value = minSize.value;
     } else if (windowRef.value) {
         minSize.value = {
-            width: Math.round((windowRef.value.clientWidth + snapX / 3) / snapX) * snapX,
-            height: Math.round((windowRef.value.clientHeight + snapY / 3) / snapY) * snapY,
+            width: Math.floor((windowRef.value.clientWidth + snapX * 0.75) / snapX) * snapX,
+            height: Math.floor((windowRef.value.clientHeight + snapY * 0.75) / snapY) * snapY,
         };
+        if (size.value.width == 0 || size.value.height == 0)
+            size.value = minSize.value;
         if (minSize.value.width > windowRef.value.clientWidth) {
             windowRef.value.style.width = `${minSize.value.width}px`;
         }
@@ -77,19 +97,15 @@ const onMaximize = () => {
     windowsStore.toggleMaximize(props.windowId);
 };
 
-const windowStyle = computed(() => {
+const windowResizerStyle = computed(() => {
     let style: CSSProperties = {
-            position: 'absolute',
-            resize: 'both',
-            overflow: 'hidden',
-            display: state.value?.isMinimized ? 'none' : undefined,
-            left: `${position.value.x}px`,
-            top: `${position.value.y}px`,
-            minWidth: `${minSize.value.width}px`,
-            minHeight: `${minSize.value.height}px`,
-            textWrap: 'nowrap',
-            zIndex: state.value?.isActive ? '1000' : undefined,
-        };
+        display: state.value?.isMinimized ? 'none' : undefined,
+        left: `${position.value.x}px`,
+        top: `${position.value.y}px`,
+        minWidth: `${minSize.value.width + 10}px`,
+        minHeight: `${minSize.value.height + 10}px`,
+        zIndex: state.value?.isActive ? '1000' : undefined,
+    };
     if (state.value?.isMaximized) {
         style = {
             ...style,
@@ -100,6 +116,25 @@ const windowStyle = computed(() => {
             top: 0,
             width: '100%',
             zIndex: '2000',
+            padding: 'unset',
+        };
+    }
+    return style;
+});
+
+const windowStyle = computed(() => {
+    let style: CSSProperties = {
+        display: state.value?.isMinimized ? 'none' : undefined,
+        width: windowResizerRef.value ? `${size.value.width}px` : undefined,
+        height: windowResizerRef.value ? `${size.value.height}px` : undefined,
+        zIndex: state.value?.isActive ? '1000' : undefined,
+    };
+    if (state.value?.isMaximized) {
+        style = {
+            ...style,
+            width: '100%',
+            height: '100%',
+            zIndex: '2000',
         };
     }
     return style;
@@ -107,23 +142,41 @@ const windowStyle = computed(() => {
 </script>
 
 <template>
-    <div ref="window" :id="props.windowId" :class="windowClass" :style="windowStyle">
-        <div ref="handle" class="handle"></div>
-        <fieldset class="tui-fieldset">
-            <legend class="center">{{ props.windowTitle }}</legend>
-            <button v-on:click="onMinimize" class="tui-fieldset-button left">
-                <span class="green-255-text">■</span>
-            </button>
-            <button v-if="props.canMaximize" v-on:click="onMaximize" class="tui-fieldset-button">
-                <span class="green-255-text">{{ state?.isMaximized ? '&darr;' : '&uarr;' }}</span>
-            </button>
-            <slot></slot>
-            <div v-if="showPos" class="tui-fieldset-text right">{{ position.x }}, {{ position.y }}</div>
-        </fieldset>
+    <div ref="windowResizer" :id="props.windowId + 'Resizer'" class="windowResizer" :style="windowResizerStyle">
+        <div ref="window" :id="props.windowId" :class="windowClass" :style="windowStyle">
+            <div ref="handle" class="handle"></div>
+            <fieldset class="tui-fieldset">
+                <legend class="center">{{ props.windowTitle }}</legend>
+                <button v-on:click="onMinimize" class="tui-fieldset-button left">
+                    <span class="green-255-text">■</span>
+                </button>
+                <button v-if="props.canMaximize" v-on:click="onMaximize" class="tui-fieldset-button">
+                    <span class="green-255-text">{{ state?.isMaximized ? '&darr;' : '&uarr;' }}</span>
+                </button>
+                <div class="content">
+                    <slot></slot>
+                </div>
+                <div v-if="showPos" class="tui-fieldset-text right">{{ position.x }}, {{ position.y }}</div>
+            </fieldset>
+        </div>
     </div>
 </template>
 
 <style lang="css" scoped>
+.windowResizer {
+    position: absolute;
+    overflow: hidden;
+    resize: both;
+    padding-bottom: 10px;
+    padding-right: 10px;
+}
+
+.window {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
 .handle {
     cursor: move;
     position: absolute;
@@ -132,7 +185,13 @@ const windowStyle = computed(() => {
     right: 18px;
     height: 22px;
 }
+
 fieldset {
     height: 100%;
+    width: 100%;
+}
+
+.content {
+    overflow: auto;
 }
 </style>

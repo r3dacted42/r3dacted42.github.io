@@ -13,12 +13,11 @@ export const useWindowsStore = defineStore('windows', () => {
     if (!existingWindow) {
       windows.value.push(state);
     }
-    setActiveWindow(state.id); // Set the newly added or existing window as active
+    setActiveWindow(state.id);
   }
 
   function setActiveWindow(id: string) {
     windows.value.forEach(w => w.isActive = false);
-    console.log(`setting window id ${id} active`);
     const activeWindow = windows.value.find(w => w.id === id);
     if (activeWindow) activeWindow.isActive = true;
   }
@@ -26,16 +25,17 @@ export const useWindowsStore = defineStore('windows', () => {
   function toggleMinimize(id: string) {
     const window = windows.value.find(w => w.id === id);
     if (window) {
-        window.isMinimized = !window.isMinimized;
-        if (!window.isMinimized) setActiveWindow(id);
+      window.isMinimized = !window.isMinimized;
+      if (window.isMaximized) toggleMaximize(id);
+      if (!window.isMinimized) setActiveWindow(id);
     }
   }
 
   function toggleMaximize(id: string) {
     const window = windows.value.find(w => w.id === id);
     if (window) {
-        window.isMaximized = !window.isMaximized;
-        if (!window.isMaximized) setActiveWindow(id);
+      window.isMaximized = !window.isMaximized;
+      if (!window.isMaximized) setActiveWindow(id);
     }
   }
 
