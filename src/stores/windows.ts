@@ -15,7 +15,6 @@ export const useWindowsStore = defineStore('windows', () => {
     if (!existingWindow) {
       windows.value.push(state);
     }
-    setActiveWindow(state.id);
   }
 
   function setActiveWindow(id: string) {
