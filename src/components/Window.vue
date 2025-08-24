@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, useTemplateRef, type CSSProperties } from 'vue';
-import { colors, snapX, snapY } from '../constants';
+import { colors, shadowW, snapX, snapY } from '../constants';
 import { useDraggable, useEventListener, useResizeObserver, useStorage } from '@vueuse/core';
 import { clamp } from '../utils';
 import type { WindowStyle } from '../types';
@@ -28,6 +28,7 @@ const size = useStorage(`${props.windowId}-sz`, props.minSize ?? {
 }, localStorage);
 
 const windowResizerRef = useTemplateRef<HTMLDivElement>('windowResizer');
+const isBeingResized = ref(false);
 const windowRef = useTemplateRef<HTMLDivElement>('window');
 const handleRef = useTemplateRef<HTMLDivElement>('handle');
 const windowsStore = useWindowsStore();
@@ -52,14 +53,25 @@ useDraggable(windowRef, {
 });
 
 useResizeObserver(windowResizerRef, (entries) => {
-    if (state.value?.isMaximized) return;
+    if (state.value?.isMaximized || !isBeingResized.value) return;
     const windowResizer = entries[0];
     const { width, height } = windowResizer.contentRect;
     if (!state.value?.isActive) windowsStore.setActiveWindow(props.windowId);
     size.value = {
-        width: Math.round(width / snapX) * snapX,
-        height: Math.round(height / snapY) * snapY,
+        width: Math.floor((width + 0.1) / snapX) * snapX,
+        height: Math.floor((height + 0.1) / snapY) * snapY,
     };
+});
+
+
+useEventListener(windowResizerRef, 'pointerdown', (_) => {
+    isBeingResized.value = true;
+});
+useEventListener(windowResizerRef, 'pointerup', (_) => {
+    isBeingResized.value = false;
+    if (!windowResizerRef.value) return;
+    windowResizerRef.value.style.width = `${size.value.width + shadowW}px`;
+    windowResizerRef.value.style.height = `${size.value.height + shadowW}px`;
 });
 
 onMounted(() => {
@@ -102,8 +114,8 @@ const windowResizerStyle = computed(() => {
         display: state.value?.isMinimized ? 'none' : undefined,
         left: `${position.value.x}px`,
         top: `${position.value.y}px`,
-        minWidth: `${minSize.value.width + 10}px`,
-        minHeight: `${minSize.value.height + 10}px`,
+        minWidth: `${minSize.value.width + shadowW}px`,
+        minHeight: `${minSize.value.height + shadowW}px`,
         zIndex: state.value?.isActive ? '1000' : undefined,
     };
     if (state.value?.isMaximized) {

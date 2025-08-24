@@ -1,5 +1,6 @@
 export const snapX = 15;
 export const snapY = 22;
+export const shadowW = 10;
 
 export const screenColors = {
     blueBlack: 'tui-bg-blue-black',

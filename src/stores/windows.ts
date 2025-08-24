@@ -1,9 +1,11 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import type { WindowState } from '../types';
+import { useStorage } from '@vueuse/core';
 
 export const useWindowsStore = defineStore('windows', () => {
   const windows = ref<WindowState[]>([]);
+  const lastActiveWindowId = useStorage('lastActiveWindowId', "", localStorage);
   const activeWindow = computed(() => windows.value.find(w => w.isActive));
   const maximizedWindow = computed(() => windows.value.find(w => w.isMaximized));
   const minimizedWindows = computed(() => windows.value.filter(w => w.isMinimized));
@@ -20,6 +22,7 @@ export const useWindowsStore = defineStore('windows', () => {
     windows.value.forEach(w => w.isActive = false);
     const activeWindow = windows.value.find(w => w.id === id);
     if (activeWindow) activeWindow.isActive = true;
+    lastActiveWindowId.value = id;
   }
 
   function toggleMinimize(id: string) {
@@ -41,6 +44,7 @@ export const useWindowsStore = defineStore('windows', () => {
 
   return {
     windows,
+    lastActiveWindowId,
     activeWindow,
     maximizedWindow,
     minimizedWindows,
