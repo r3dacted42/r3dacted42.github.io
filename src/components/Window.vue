@@ -82,6 +82,8 @@ onMounted(() => {
         isMinimized: false,
         isMaximized: false,
     });
+    if (windowsStore.lastActiveWindowId == props.windowId)
+        windowsStore.setActiveWindow(props.windowId);
     if (props.minSize) {
         minSize.value = props.minSize;
         if (size.value.width == 0 || size.value.height == 0)
