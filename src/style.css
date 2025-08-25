@@ -1,15 +1,8 @@
-html {
-  /* https://github.com/D3nn7/crt-css */
-  animation-duration: 0.01s;
-  animation-name: textflicker;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-}
-
 html,
 body,
 #app {
-  height: 100%;
+  height: 100vh;
+  width: 100vw;
   background-color: black;
   overflow: hidden;
 }
@@ -18,6 +11,15 @@ body,
   user-select: none;
   margin: 0;
   padding: 0;
+}
+
+/* https://github.com/D3nn7/crt-css */
+/* Begin CRT CSS */
+html {
+  animation-duration: 0.01s;
+  animation-name: textflicker;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
 }
 
 @keyframes textflicker {
@@ -29,3 +31,5 @@ body,
     text-shadow: 2px 0.5px 2px #ea36af, -1px -0.5px 2px #75fa69;
   }
 }
+
+/* End CRT CSS */

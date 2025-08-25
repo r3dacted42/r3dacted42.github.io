@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, type CSSProperties } from 'vue';
+import { computed, type ComputedRef, type CSSProperties } from 'vue';
 import { screenColors, type ScreenColors } from '../constants';
 import { useWindowsStore } from '../stores/windows';
 
@@ -22,13 +22,10 @@ const restoreWindow = (id: string) => {
     windowsStore.toggleMinimize(id);
 }
 
-const barStyle = computed(() => {
-    const style: CSSProperties = {
-        position: windowsStore.maximizedWindow ? 'relative' : 'fixed',
-        zIndex: 2001,
-    };
-    return style;
-});
+const barStyle: ComputedRef<CSSProperties> = computed(() => ({
+    position: windowsStore.maximizedWindow ? 'relative' : 'absolute',
+    zIndex: windowsStore.maxZIdx + 1,
+}));
 
 const resetPage = () => {
     localStorage.clear();
