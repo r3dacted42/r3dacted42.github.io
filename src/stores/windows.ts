@@ -1,36 +1,28 @@
 import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
+import { computed } from 'vue';
 import type { WindowState } from '../types';
 import { useStorage } from '@vueuse/core';
 
 export const useWindowsStore = defineStore('windows', () => {
-  const windows = ref<WindowState[]>([]);
-  const persistentData = useStorage('windowsPersistentData', {
-    activeWindowId: "",
-    maximizedWindowId: "",
-    minimizedWindowIds: [] as string[],
-  }, localStorage);
-  const maxZIdx = computed(() => windows.value.reduce((h, w) => (w.zIndex > h ? w.zIndex : h), 0));
-  const activeWindow = computed(() => windows.value.find(w => w.zIndex === maxZIdx.value));
+  const windows = useStorage('windows', [] as WindowState[], localStorage);
+  const activeWindow = computed(() => windows.value.find(w => w.zIndex === windows.value.length));
   const maximizedWindow = computed(() => windows.value.find(w => w.isMaximized));
   const minimizedWindows = computed(() => windows.value.filter(w => w.isMinimized));
 
   function addWindow(state: WindowState) {
     let existingWindow = windows.value.find(w => w.id === state.id);
-    if (!existingWindow) {
-      windows.value.push({
-        ...state,
-        isMinimized: persistentData.value.minimizedWindowIds.includes(state.id),
-        isMaximized: persistentData.value.maximizedWindowId === state.id,
-        zIndex: persistentData.value.activeWindowId === state.id ? maxZIdx.value : state.zIndex,
-      });
-    }
+    if (!existingWindow) windows.value.push({
+      ...state, zIndex: windows.value.length + 1,
+    });
+    else setActiveWindow(state.id);
   }
 
   function setActiveWindow(id: string) {
-    const activeWindow = windows.value.find(w => w.id === id);
-    if (activeWindow) activeWindow.zIndex = maxZIdx.value + 1;
-    persistentData.value.activeWindowId = id;
+    const window = windows.value.find(w => w.id === id);
+    if (!window) return;
+    if (window.zIndex >= windows.value.length) return;
+    window.zIndex = windows.value.length + 1;
+    windows.value.forEach(w => w.zIndex -= 1);
   }
 
   function toggleMinimize(id: string) {
@@ -38,34 +30,18 @@ export const useWindowsStore = defineStore('windows', () => {
     if (window) {
       window.isMinimized = !window.isMinimized;
       if (window.isMinimized) {
-        persistentData.value.minimizedWindowIds.push(id);
-        if (persistentData.value.activeWindowId === id) 
-          persistentData.value.activeWindowId = "";
         if (window.isMaximized) toggleMaximize(id);
-      } else {
-        setActiveWindow(id);
-        persistentData.value.minimizedWindowIds.splice(
-          persistentData.value.minimizedWindowIds.findIndex(mid => mid === id), 1,
-        );
-      }
+      } else setActiveWindow(id);
     }
   }
 
   function toggleMaximize(id: string) {
     const window = windows.value.find(w => w.id === id);
-    if (window) {
-      window.isMaximized = !window.isMaximized;
-      if (window.isMaximized) persistentData.value.maximizedWindowId = id;
-      else {
-        persistentData.value.maximizedWindowId = "";
-        if (!window.isMinimized) setActiveWindow(id);
-      }
-    }
+    if (window) window.isMaximized = !window.isMaximized;
   }
 
   return {
     windows,
-    maxZIdx,
     activeWindow,
     maximizedWindow,
     minimizedWindows,

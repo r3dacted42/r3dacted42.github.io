@@ -24,7 +24,7 @@ const restoreWindow = (id: string) => {
 
 const barStyle: ComputedRef<CSSProperties> = computed(() => ({
     position: windowsStore.maximizedWindow ? 'relative' : 'absolute',
-    zIndex: windowsStore.maxZIdx + 1,
+    zIndex: windowsStore.windows.length + 1,
 }));
 
 const resetPage = () => {

@@ -2,7 +2,7 @@
 import { computed, onMounted, ref, useTemplateRef, type CSSProperties, type TemplateRef } from 'vue';
 import { barHeight, colors, minWindowHeight, minWindowWidth, shadowW, snapX, snapY } from '../constants';
 import { useDraggable, useEventListener, useStorage, type RemovableRef } from '@vueuse/core';
-import { clamp } from '../utils';
+import { clamp, snapR, snapF } from '../utils';
 import type { WindowStyle } from '../types';
 import { useWindowsStore } from '../stores/windows';
 
@@ -31,48 +31,52 @@ const contentRef = useTemplateRef<HTMLDivElement>('content');
 const windowsStore = useWindowsStore();
 const state = computed(() => windowsStore.windows.find(w => w.id === props.windowId));
 
-const maxX = computed(() => {
-    let res = document.documentElement.clientWidth - shadowW;
+const maxPosX = () => {
+    let res = window.innerWidth - shadowW;
     if (windowRef.value) res -= windowRef.value.clientWidth;
-    return (Math.round((res - snapX * 0.25) / snapX) * snapX);
-});
-const maxY = computed(() => {
-    let res = document.documentElement.clientHeight - barHeight - shadowW;
+    else res -= minWindowWidth;
+    return snapR(res - snapX * 0.25, snapX);
+};
+const maxPosY = () => {
+    let res = window.innerHeight - barHeight - shadowW;
     if (windowRef.value) res -= windowRef.value.clientHeight;
-    return (Math.round((res - snapY * 0.25) / snapY) * snapY);
-});
+    else res -= minWindowHeight;
+    return snapR(res - snapY * 0.25, snapY);
+};
+const maxWidth = () => snapR(window.innerWidth - position.value.x - shadowW - snapX * 0.25, snapX);
+const maxHeight = () => snapR(window.innerHeight - position.value.y - shadowW - barHeight - snapY * 0.25, snapY);
 
-useEventListener(windowRef, ['touchstart', 'pointerdown'], () => {
+useEventListener(windowRef, 'pointerdown', () => {
     windowsStore.setActiveWindow(props.windowId);
 });
 
 useDraggable(windowRef, {
     handle: dragHandleRef,
+    capture: true,
     preventDefault: true,
     onMove(cursorPos, _) {
         position.value = {
-            x: clamp(Math.round(cursorPos.x / snapX) * snapX, 0, maxX.value),
-            y: clamp(Math.round(cursorPos.y / snapY) * snapY, barHeight, maxY.value),
+            x: clamp(snapR(cursorPos.x, snapX), 0, maxPosX()),
+            y: clamp(snapR(cursorPos.y, snapY), barHeight, maxPosY()),
         };
     },
 });
 
 useDraggable(resizeHandleRef, {
+    capture: true,
     preventDefault: true,
     onMove(cursorPos, _) {
         if (!resizeHandleRef.value) return;
         const width = cursorPos.x - position.value.x + resizeHandleRef.value.clientWidth;
         const height = cursorPos.y - position.value.y + resizeHandleRef.value.clientHeight;
-        const maxWidth = maxX.value - position.value.x;
-        const maxHeight = maxY.value - position.value.y;
         size.value = {
-            width: clamp(Math.round(width / snapX) * snapX, minWindowWidth, maxWidth),
-            height: clamp(Math.round(height / snapY) * snapY, minWindowHeight, maxHeight),
+            width: snapF(clamp(width, minWindowWidth, maxWidth()), snapX),
+            height: snapF(clamp(height, minWindowHeight, maxHeight()), snapY),
         };
     },
 });
 
-onMounted(() => {
+function initWindow() {
     windowsStore.addWindow({
         id: props.windowId,
         title: props.windowTitle,
@@ -81,8 +85,8 @@ onMounted(() => {
         isMaximized: false,
     });
     position.value = {
-        x: clamp(position.value.x, 0, maxX.value),
-        y: clamp(position.value.y, barHeight, maxY.value),
+        x: clamp(position.value.x, 0, maxPosX()),
+        y: clamp(position.value.y, barHeight, maxPosY()),
     };
     const calcSizeRefInitValue = (
         referenceElementRef: TemplateRef<HTMLDivElement>,
@@ -92,12 +96,8 @@ onMounted(() => {
     ) => {
         if (!referenceElementRef.value || !targetElementRef.value) return;
         sizeRef.value = {
-            width: clamp(Math.floor((referenceElementRef.value.clientWidth) / snapX) * snapX,
-                minWindowWidth,
-                document.documentElement.clientWidth - shadowW),
-            height: clamp(Math.floor((referenceElementRef.value.clientHeight) / snapY) * snapY,
-                minWindowHeight,
-                document.documentElement.clientHeight - barHeight - shadowW),
+            width: clamp(snapF(referenceElementRef.value.clientWidth, snapX), minWindowWidth, maxWidth()),
+            height: clamp(snapF(referenceElementRef.value.clientHeight, snapY), minWindowHeight, maxHeight()),
         };
         if (sizeRef.value.width > targetElementRef.value.clientWidth) {
             targetElementRef.value.style.width = `${sizeRef.value.width + (sizeOffset ? sizeOffset.width : 0)}px`;
@@ -110,6 +110,11 @@ onMounted(() => {
     if (size.value.width == 0 || size.value.height == 0) {
         calcSizeRefInitValue(contentRef, windowRef, size, { width: 18 * 4, height: 22 * 2 });
     }
+}
+
+onMounted(() => {
+    if (!windowsStore.windows.some(w => w.id === props.windowId))
+        initWindow();
 });
 
 const onMinimize = () => {
@@ -136,7 +141,7 @@ const windowStyle = computed(() => {
             left: 0,
             top: 0,
             width: '100%',
-            zIndex: windowsStore.maxZIdx + 1,
+            zIndex: windowsStore.windows.length + 1,
             padding: 'unset',
         };
     }

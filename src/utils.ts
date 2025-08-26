@@ -3,3 +3,15 @@ export const clamp = (
 ) => {
     return Math.max(min, Math.min(max, n));
 };
+
+export const snapR = (
+    n: number, snapTo: number
+) => {
+    return Math.round(n / snapTo) * snapTo;
+};
+
+export const snapF = (
+    n: number, snapTo: number
+) => {
+    return Math.floor(n / snapTo) * snapTo;
+};
