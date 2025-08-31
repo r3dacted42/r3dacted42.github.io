@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Projects from './components/Projects.vue';
 import Screen from './components/Screen.vue';
 import Window from './components/Window.vue';
 import { colors, snapX, snapY } from './constants';
@@ -36,10 +37,11 @@ import { colors, snapX, snapY } from './constants';
       </div>
       <Window window-id="hi" window-title="hi :)" :initial-position="{ x: snapX * 3, y: snapY * 3 }"
         :style="{ bgColor: colors.cyan.a8 }" :can-maximize="true">
-        welcome to my portfolio!
+        <pre>hi, i'm priyansh agrahari
+welcome to my portfolio!</pre>
       </Window>
       <Window window-id="cat" window-title="meow" :initial-position="{ x: snapX * 7, y: snapY * 10 }"
-        :style="{ bgColor: colors.purple.a8 }" :can-maximize="true" :show-pos="true">
+        :style="{ bgColor: colors.purple.a8 }" :can-maximize="true" :show-pos="true" :is-minimized="true">
         <pre>⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿
 ⣿⣿⣿⣿⣿⣿⡿⢟⠿⣿⣿⣿⣿⣿⣿⣿⣿⡟⣡⣿⣷⣌⡻⣿⣿⣿⣿⣿⣿⣿
 ⣿⣿⣿⣿⡿⢋⣴⣿⣷⣝⣿⣿⣿⣿⣿⣿⢋⣼⣿⣿⣿⣿⣿⣌⢻⣿⣿⣿⣿⣿
@@ -56,6 +58,7 @@ import { colors, snapX, snapY } from './constants';
 ⣿⣿⣿⣿⣿⣿⣧⡛⠿⠟⣰⣿⣿⣿⣿⣿⣿⣛⡛⢩⣵⣶⣿⡋⡙⠛⣋⢹⣿⣿
 ⣿⢿⣿⣿⣿⣿⣿⣿⣿⢰⣿⣿⣿⣿⣿⣿⣿⣿⡇⣸⣿⣿⡿⢃⣽⣿⣧⡘⢿⣿</pre>
       </Window>
+      <Projects />
     </template>
   </Screen>
 </template>

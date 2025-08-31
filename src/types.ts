@@ -10,3 +10,13 @@ export interface WindowState {
     isMinimized: boolean,
     isMaximized: boolean,
 };
+
+export type ProjectData = {
+    id: string,
+    title: string,
+    languages: string[],
+    description: string,
+    homepage?: string,
+    topics: string[],
+    readme: string,
+};

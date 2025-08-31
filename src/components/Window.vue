@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, useTemplateRef, type CSSProperties, type TemplateRef } from 'vue';
 import { barHeight, colors, minWindowHeight, minWindowWidth, shadowW, snapX, snapY } from '../constants';
-import { useDraggable, useEventListener, useStorage, type RemovableRef } from '@vueuse/core';
+import { useDraggable, useEventListener, useStorage, type ElementSize, type Position, type RemovableRef } from '@vueuse/core';
 import { clamp, snapR, snapF } from '../utils';
 import type { WindowStyle } from '../types';
 import { useWindowsStore } from '../stores/windows';
@@ -9,8 +9,9 @@ import { useWindowsStore } from '../stores/windows';
 const props = defineProps({
     windowId: { type: String, required: true },
     windowTitle: { type: String, required: true },
-    initialPosition: { type: Object as () => { x: number, y: number }, required: true },
+    initialPosition: { type: Object as () => Position, required: true },
     canMaximize: { type: Boolean },
+    isMinimized: { type: Boolean },
     style: { type: Object as () => WindowStyle },
     showPos: { type: Boolean },
 });
@@ -20,8 +21,8 @@ const windowClass = `tui-window window ${bgColor} \
 ${props.style?.fgColor ?? colors.white.ff}-text`;
 
 const position = useStorage(`${props.windowId}-pos`, props.initialPosition, localStorage);
-const size = useStorage(`${props.windowId}-sz`, { width: 0, height: 0 }, localStorage);
-const contentSize = ref({ width: 0, height: 0 });
+const size = useStorage(`${props.windowId}-sz`, { width: 0, height: 0 } as ElementSize, localStorage);
+const contentSize = ref({ width: 0, height: 0 } as ElementSize);
 
 const windowRef = useTemplateRef<HTMLDivElement>('window');
 const dragHandleRef = useTemplateRef<HTMLDivElement>('dragHandle');
@@ -81,7 +82,7 @@ function initWindow() {
         id: props.windowId,
         title: props.windowTitle,
         zIndex: 1,
-        isMinimized: false,
+        isMinimized: props.isMinimized ?? false,
         isMaximized: false,
     });
     position.value = {
@@ -91,25 +92,33 @@ function initWindow() {
     const calcSizeRefInitValue = (
         referenceElementRef: TemplateRef<HTMLDivElement>,
         targetElementRef: TemplateRef<HTMLDivElement>,
-        sizeRef: RemovableRef<{ width: number, height: number }>,
-        sizeOffset?: { width: number, height: number },
+        sizeRef: RemovableRef<ElementSize>,
+        minSize?: ElementSize,
+        sizeOffset?: ElementSize,
     ) => {
         if (!referenceElementRef.value || !targetElementRef.value) return;
+        console.log(props.windowId, "width:", snapF(referenceElementRef.value.clientWidth
+            + (sizeOffset?.width ?? 0), snapX));
+        console.log(props.windowId, "height:", snapF(referenceElementRef.value.clientHeight
+            + (sizeOffset?.height ?? 0), snapY));
         sizeRef.value = {
-            width: clamp(snapF(referenceElementRef.value.clientWidth, snapX), minWindowWidth, maxWidth()),
-            height: clamp(snapF(referenceElementRef.value.clientHeight, snapY), minWindowHeight, maxHeight()),
+            width: clamp(snapF(referenceElementRef.value.clientWidth
+                + (sizeOffset?.width ?? 0), snapX), minSize?.width, maxWidth()),
+            height: clamp(snapF(referenceElementRef.value.clientHeight
+                + (sizeOffset?.height ?? 0), snapY), minSize?.height, maxHeight()),
         };
         if (sizeRef.value.width > targetElementRef.value.clientWidth) {
-            targetElementRef.value.style.width = `${sizeRef.value.width + (sizeOffset ? sizeOffset.width : 0)}px`;
+            targetElementRef.value.style.width = `${sizeRef.value.width}px`;
         }
         if (sizeRef.value.height > targetElementRef.value.clientHeight) {
-            targetElementRef.value.style.height = `${sizeRef.value.height + (sizeOffset ? sizeOffset.height : 0)}px`;
+            targetElementRef.value.style.height = `${sizeRef.value.height}px`;
         }
     };
     calcSizeRefInitValue(contentRef, contentRef, contentSize);
-    if (size.value.width == 0 || size.value.height == 0) {
-        calcSizeRefInitValue(contentRef, windowRef, size, { width: 18 * 4, height: 22 * 2 });
-    }
+    calcSizeRefInitValue(contentRef, windowRef, size,
+        { width: minWindowWidth, height: minWindowHeight },
+        { width: snapX * 3.5, height: snapY * 3.5 }
+    );
 }
 
 onMounted(() => {
@@ -172,9 +181,6 @@ const windowStyle = computed(() => {
 <style lang="css" scoped>
 .window {
     position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
 }
 
 .dragHandle {
@@ -203,5 +209,13 @@ fieldset {
     min-width: unset;
     height: 100%;
     overflow: auto;
+}
+
+.content {
+    padding: 0;
+    min-width: fit-content;
+    width: 100%;
+    min-height: fit-content;
+    height: 100%;
 }
 </style>

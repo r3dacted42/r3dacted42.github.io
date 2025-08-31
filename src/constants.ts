@@ -2,8 +2,8 @@ export const snapX = 15;
 export const snapY = 22;
 export const shadowW = 10;
 export const barHeight = 22;
-export const minWindowWidth = 300;
-export const minWindowHeight = 150;
+export const minWindowWidth = snapX * 21;
+export const minWindowHeight = snapY * 5;
 
 export const screenColors = {
     blueBlack: 'tui-bg-blue-black',

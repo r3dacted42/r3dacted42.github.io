@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
+    "fetch:projects": "tsx scripts/fetch-projects.ts",
     "preview": "vite preview",
     "deploy": "gh-pages -d dist"
   },
@@ -17,8 +18,10 @@
     "vue": "^3.5.17"
   },
   "devDependencies": {
+    "@types/node": "^24.3.0",
     "@vitejs/plugin-vue": "^6.0.0",
     "@vue/tsconfig": "^0.7.0",
+    "tsx": "^4.20.5",
     "typescript": "~5.8.3",
     "vite": "^7.0.0",
     "vue-tsc": "^2.2.10"
