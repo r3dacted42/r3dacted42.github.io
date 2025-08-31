@@ -16,6 +16,9 @@ jobs:
       - name: Disable CI checks
         run: echo "CI=false" >> $GITHUB_ENV
 
+      - name: Fetch Project Data
+        run: npm run fetch:projects
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -26,9 +29,6 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
-
-      - name: Fetch Project Data
-        run: npm run fetch:projects
 
       - name: Build
         run: npm run build
