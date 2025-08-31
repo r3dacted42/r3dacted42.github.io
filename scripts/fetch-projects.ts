@@ -8,7 +8,10 @@ import projectList from '../src/assets/projectList';
     const headers: Record<string, string> = {
         'Accept': 'application/vnd.github.v3+json',
     };
-    if (token) headers['Authorization'] = `Bearer ${token}`;
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+        console.log("using token for authenticated api requests");
+    }
     const promises = projectList.map(async (listItem): Promise<ProjectData | null> => {
         try {
             console.log(`fetching data for ${listItem.repo}...`);
