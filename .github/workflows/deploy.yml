@@ -12,35 +12,27 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
-      - name: Disable CI checks
-        run: echo "CI=false" >> $GITHUB_ENV
-
-      - name: Fetch Project Data
-        run: npm run fetch:projects
-
+        
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: 'npm'
-      - run: npm ci
-      - run: npm run build --if-present
-
+          
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Build
+      - name: Fetch Project Data
+        run: npm run fetch:projects
+        env:
+          GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+
+      - name: Build Application
         run: npm run build
 
-      - name: Deploy
+      - name: Deploy to GH Pages
         run: |
-          git config --global user.name $user_name
-          git config --global user.email $user_email
-          git remote set-url origin https://${github_token}@github.com/${repository}
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git remote set-url origin https://${{ secrets.DEPLOY_TOKEN }}@github.com/${{ github.repository }}
           npm run deploy
-        env:
-          user_name: 'github-actions[bot]'
-          user_email: 'github-actions[bot]@users.noreply.github.com'
-          github_token: ${{ secrets.DEPLOY_TOKEN }}
-          repository: ${{ github.repository }}

@@ -4,14 +4,19 @@ import type { ProjectData } from "../src/types";
 import projectList from '../src/assets/projectList';
 
 (async () => {
+    const token = process.env.GITHUB_TOKEN;
+    const headers: Record<string, string> = {
+        'Accept': 'application/vnd.github.v3+json',
+    };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
     const promises = projectList.map(async (listItem): Promise<ProjectData | null> => {
         try {
             console.log(`fetching data for ${listItem.repo}...`);
             const apiRepoUri = `https://api.github.com/repos/r3dacted42/${listItem.repo}`;
             const [repoResponse, readmeResponse, languagesResponse] = await Promise.all([
-                fetch(apiRepoUri),
-                fetch(`${apiRepoUri}/readme`),
-                fetch(`${apiRepoUri}/languages`),
+                fetch(apiRepoUri, { headers }),
+                fetch(`${apiRepoUri}/readme`, { headers }),
+                fetch(`${apiRepoUri}/languages`, { headers }),
             ]);
             if (!repoResponse.ok) {
                 console.error(`failed to fetch repo data for ${listItem.repo}: ${repoResponse.statusText}`);
@@ -23,9 +28,9 @@ import projectList from '../src/assets/projectList';
             if (!languagesResponse.ok) {
                 console.warn(`failed to fetch languages for ${listItem.repo}: ${languagesResponse.statusText}`);
             }
-            const repoData = await repoResponse.json();
-            const readmeData = readmeResponse.ok ? await readmeResponse.json() : null;
-            const languagesData : Record<string, number> = languagesResponse.ok ? await languagesResponse.json() : {};
+            const repoData = await repoResponse.json() as Record<string, any>;
+            const readmeData = readmeResponse.ok ? await readmeResponse.json() as { content: string } : null;
+            const languagesData = languagesResponse.ok ? await languagesResponse.json() as Record<string, number> : {};
             const projectData: ProjectData = {
                 id: listItem.repo,
                 title: listItem.title ?? listItem.repo,
