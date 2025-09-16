@@ -11,6 +11,8 @@ import projectList from '../src/assets/projectList';
     if (token) {
         headers['Authorization'] = `Bearer ${token}`;
         console.log("using token for authenticated api requests");
+    } else {
+        console.log("token not found.");
     }
     const promises = projectList.map(async (listItem): Promise<ProjectData | null> => {
         try {
@@ -42,6 +44,7 @@ import projectList from '../src/assets/projectList';
                 languages: Object.keys(languagesData),
                 homepage: repoData.homepage || undefined,
                 readme: readmeData ? atob(readmeData.content) : 'No README content.',
+                windowStyle: listItem.windowStyle,
             };
             return projectData;
         } catch (error) {

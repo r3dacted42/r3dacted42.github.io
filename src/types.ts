@@ -1,6 +1,8 @@
+import type { Color } from "./constants";
+
 export interface WindowStyle {
-    bgColor?: string,
-    fgColor?: string,
+    bgColor?: Color,
+    fgColor?: Color,
 };
 
 export interface WindowState {
@@ -19,4 +21,5 @@ export type ProjectData = {
     homepage?: string,
     topics: string[],
     readme: string,
+    windowStyle?: WindowStyle,
 };

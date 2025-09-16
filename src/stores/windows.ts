@@ -20,10 +20,10 @@ export const useWindowsStore = defineStore('windows', () => {
   function setActiveWindow(id: string) {
     const window = windows.value.find(w => w.id === id);
     if (!window) return;
+    if (window.isMinimized) toggleMinimize(id);
     if (window.zIndex >= windows.value.length) return;
     windows.value.forEach(w => { if (w.zIndex > window.zIndex) w.zIndex-- });
     window.zIndex = windows.value.length;
-    // console.log(windows.value.reduce((p, c) => `${p} ${c.zIndex}`, ''));
   }
 
   function toggleMinimize(id: string) {
@@ -40,6 +40,15 @@ export const useWindowsStore = defineStore('windows', () => {
     const window = windows.value.find(w => w.id === id);
     if (window) window.isMaximized = !window.isMaximized;
   }
+  
+  function removeWindow(id: string) {
+    const window = windows.value.find(w => w.id === id);
+    const windowIdx = windows.value.findIndex(w => w.id === id);
+    if (windowIdx && window) {
+      windows.value.forEach(w => { if (w.zIndex > window.zIndex) w.zIndex-- });
+      windows.value.splice(windowIdx, 1);
+    }
+  }
 
   return {
     windows,
@@ -50,5 +59,6 @@ export const useWindowsStore = defineStore('windows', () => {
     setActiveWindow,
     toggleMinimize,
     toggleMaximize,
+    removeWindow,
   };
 });

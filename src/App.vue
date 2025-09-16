@@ -2,11 +2,11 @@
 import Projects from './components/Projects.vue';
 import Screen from './components/Screen.vue';
 import Window from './components/Window.vue';
-import { colors, snapX, snapY } from './constants';
+import { colors, screenColors, snapX, snapY } from './constants';
 </script>
 
 <template>
-  <Screen :style="{ color: 'blueBlack' }">
+  <Screen :style="{ color: screenColors.blueBlack }">
     <template #nav-li>
       <li><a href="https://r3dacted42.github.io/resume" target="_blank">resume</a></li>
     </template>

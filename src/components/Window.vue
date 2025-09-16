@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, useTemplateRef, type CSSProperties, type TemplateRef } from 'vue';
-import { barHeight, colors, minWindowHeight, minWindowWidth, shadowW, snapX, snapY } from '../constants';
+import { barHeight, colorHexMap, colors, minWindowHeight, minWindowWidth, shadowW, snapX, snapY } from '../constants';
 import { useDraggable, useEventListener, useStorage, type ElementSize, type Position, type RemovableRef } from '@vueuse/core';
 import { clamp, snapR, snapF } from '../utils';
 import type { WindowStyle } from '../types';
@@ -156,17 +156,24 @@ const windowStyle = computed(() => {
     }
     return style;
 });
+
+const fieldsetBorderColor = computed(() => {
+    if (props.style && props.style.fgColor) {
+        return colorHexMap[props.style.fgColor];
+    }
+    return colorHexMap[colors.white.ff];
+});
 </script>
 
 <template>
     <div ref="window" :id="props.windowId" :class="windowClass" :style="windowStyle">
         <div ref="dragHandle" class="dragHandle"></div>
-        <fieldset class="tui-fieldset">
+        <fieldset class="tui-fieldset" :style="{ borderColor: fieldsetBorderColor }">
             <legend class="center">{{ props.windowTitle }}</legend>
-            <button v-on:click="onMinimize" class="tui-fieldset-button left">
+            <button v-on:click="onMinimize" :class="`tui-fieldset-button left ${props.style?.fgColor ?? colors.white.ff}-text`">
                 <span class="green-255-text">■</span>
             </button>
-            <button v-if="props.canMaximize" v-on:click="onMaximize" class="tui-fieldset-button">
+            <button v-if="props.canMaximize" v-on:click="onMaximize" :class="`tui-fieldset-button ${props.style?.fgColor ?? colors.white.ff}-text`">
                 <span class="green-255-text">{{ state?.isMaximized ? '&darr;' : '&uarr;' }}</span>
             </button>
             <div ref="content" class="content">

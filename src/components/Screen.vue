@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { computed, type ComputedRef, type CSSProperties } from 'vue';
-import { screenColors, type ScreenColors } from '../constants';
+import { type ScreenColor } from '../constants';
 import { useWindowsStore } from '../stores/windows';
 
 export interface ScreenStyle {
-    color?: keyof ScreenColors,
+    color?: ScreenColor,
     bordered?: boolean,
 };
 
@@ -13,7 +13,7 @@ const props = defineProps({
 });
 
 const screenClass = `tui-screen \
-${props.style?.color ? screenColors[props.style?.color] : ''} \
+${props.style?.color ?? ''} \
 ${props.style?.bordered ? 'bordered' : ''}`;
 
 const windowsStore = useWindowsStore();
