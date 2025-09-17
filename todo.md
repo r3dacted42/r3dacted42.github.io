@@ -1,2 +1,1 @@
-- try using entire window from dragging to fix mobile drag issue
 - add screensaver on no mouse movement for 30 seconds

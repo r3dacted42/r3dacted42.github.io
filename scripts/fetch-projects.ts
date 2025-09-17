@@ -2,8 +2,10 @@ import { writeFile } from 'fs/promises';
 import { resolve } from 'path';
 import type { ProjectData } from "../src/types";
 import projectList from '../src/assets/projectList';
+import dotenv from 'dotenv';
 
 (async () => {
+    dotenv.config();
     const token = process.env.GITHUB_TOKEN;
     const headers: Record<string, string> = {
         'Accept': 'application/vnd.github.v3+json',
@@ -12,7 +14,7 @@ import projectList from '../src/assets/projectList';
         headers['Authorization'] = `Bearer ${token}`;
         console.log("using token for authenticated api requests");
     } else {
-        console.log("token not found.");
+        console.log("token not found");
     }
     const promises = projectList.map(async (listItem): Promise<ProjectData | null> => {
         try {
@@ -28,7 +30,7 @@ import projectList from '../src/assets/projectList';
                 return null;
             }
             if (!readmeResponse.ok) {
-                console.warn(`no readme found for ${listItem.repo}`);
+                console.warn(`failed to fetch readme for ${listItem.repo}: ${readmeResponse.statusText}`);
             }
             if (!languagesResponse.ok) {
                 console.warn(`failed to fetch languages for ${listItem.repo}: ${languagesResponse.statusText}`);
@@ -53,7 +55,7 @@ import projectList from '../src/assets/projectList';
         }
     });
     const results = (await Promise.all(promises)).filter(p => p !== null) as ProjectData[];
-    const outputPath = resolve(process.cwd(), 'src/assets/projectsData.json');
+    const outputPath = resolve(process.cwd(), 'public/data/projects.json');
     const jsonData = JSON.stringify(results, null, 2);
     await writeFile(outputPath, jsonData, 'utf-8');
 

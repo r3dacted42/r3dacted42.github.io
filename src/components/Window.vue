@@ -9,18 +9,20 @@ import { useWindowsStore } from '../stores/windows';
 const props = defineProps({
     windowId: { type: String, required: true },
     windowTitle: { type: String, required: true },
-    initialPosition: { type: Object as () => Position, required: true },
-    canMaximize: { type: Boolean },
-    isMinimized: { type: Boolean },
+    initialPosition: { type: Object as () => Position },
+    canMaximize: { type: Boolean, default: true },
+    isMinimized: { type: Boolean, default: false },
+    canClose: { type: Boolean, default: true },
+    onClose: { type: Object as () => ((windowId: string) => void) },
     style: { type: Object as () => WindowStyle },
     showPos: { type: Boolean },
 });
 
 const bgColor = props.style?.bgColor ?? colors.blue.a8;
-const windowClass = `tui-window window ${bgColor} \
-${props.style?.fgColor ?? colors.white.ff}-text`;
+const fgColor = props.style?.fgColor ?? colors.white.ff;
+const windowClass = `tui-window window ${bgColor} ${fgColor}-text`;
 
-const position = useStorage(`${props.windowId}-pos`, props.initialPosition, localStorage);
+const position = useStorage(`${props.windowId}-pos`, props.initialPosition ?? { x: 0, y: 0 } as Position, localStorage);
 const size = useStorage(`${props.windowId}-sz`, { width: 0, height: 0 } as ElementSize, localStorage);
 const contentSize = ref({ width: 0, height: 0 } as ElementSize);
 
@@ -82,9 +84,20 @@ function initWindow() {
         id: props.windowId,
         title: props.windowTitle,
         zIndex: 1,
-        isMinimized: props.isMinimized ?? false,
+        isMinimized: false,
         isMaximized: false,
     });
+    if (props.isMinimized) windowsStore.toggleMinimize(props.windowId);
+    if (!props.initialPosition) {
+        const nextPos = {
+            x: windowsStore.lastPos.x + snapX * 3,
+            y: windowsStore.lastPos.y + snapY * 3,
+        } as Position;
+        if (nextPos.x >= maxPosX()) nextPos.x = snapX * 3;
+        if (nextPos.y >= maxPosY()) nextPos.y = snapY * 3;
+        position.value = nextPos;
+        windowsStore.setLastPos(nextPos);
+    }
     position.value = {
         x: clamp(position.value.x, 0, maxPosX()),
         y: clamp(position.value.y, barHeight, maxPosY()),
@@ -117,7 +130,7 @@ function initWindow() {
     calcSizeRefInitValue(contentRef, contentRef, contentSize);
     calcSizeRefInitValue(contentRef, windowRef, size,
         { width: minWindowWidth, height: minWindowHeight },
-        { width: snapX * 3.5, height: snapY * 3.5 }
+        { width: snapX * 5, height: snapY * 4 },
     );
 }
 
@@ -126,9 +139,11 @@ onMounted(() => {
         initWindow();
 });
 
-const onMinimize = () => {
-    windowsStore.toggleMinimize(props.windowId);
+const onClose = () => {
+    if (props.onClose) props.onClose(props.windowId);
+    windowsStore.removeWindow(props.windowId);
 };
+
 const onMaximize = () => {
     windowsStore.toggleMaximize(props.windowId);
 };
@@ -157,26 +172,25 @@ const windowStyle = computed(() => {
     return style;
 });
 
-const fieldsetBorderColor = computed(() => {
-    if (props.style && props.style.fgColor) {
-        return colorHexMap[props.style.fgColor];
-    }
-    return colorHexMap[colors.white.ff];
-});
+const contentCSSVars = computed((): CSSProperties => ({
+    "--fg-color": colorHexMap[fgColor],
+    "--bg-color": colorHexMap[bgColor],
+    "--snap-y": `${snapY}px`,
+}));
 </script>
 
 <template>
     <div ref="window" :id="props.windowId" :class="windowClass" :style="windowStyle">
         <div ref="dragHandle" class="dragHandle"></div>
-        <fieldset class="tui-fieldset" :style="{ borderColor: fieldsetBorderColor }">
+        <fieldset class="tui-fieldset">
             <legend class="center">{{ props.windowTitle }}</legend>
-            <button v-on:click="onMinimize" :class="`tui-fieldset-button left ${props.style?.fgColor ?? colors.white.ff}-text`">
+            <button v-if="props.canClose" v-on:click="onClose" :class="`tui-fieldset-button left ${fgColor}-text`">
                 <span class="green-255-text">■</span>
             </button>
-            <button v-if="props.canMaximize" v-on:click="onMaximize" :class="`tui-fieldset-button ${props.style?.fgColor ?? colors.white.ff}-text`">
+            <button v-if="props.canMaximize" v-on:click="onMaximize" :class="`tui-fieldset-button ${fgColor}-text`">
                 <span class="green-255-text">{{ state?.isMaximized ? '&darr;' : '&uarr;' }}</span>
             </button>
-            <div ref="content" class="content">
+            <div ref="content" class="content" :style="contentCSSVars">
                 <slot></slot>
             </div>
             <div v-if="showPos" class="tui-fieldset-text right">{{ position.x }}, {{ position.y }}</div>
@@ -188,6 +202,11 @@ const fieldsetBorderColor = computed(() => {
 <style lang="css" scoped>
 .window {
     position: absolute;
+}
+
+.window :deep(*) {
+    border-color: var(--fg-color);
+    color: var(--fg-color);
 }
 
 .dragHandle {
@@ -224,5 +243,31 @@ fieldset {
     width: 100%;
     min-height: fit-content;
     height: 100%;
+}
+
+.content :deep(:is(h1, h2, h3, h4, h5, h6)) {
+    margin-top: var(--snap-y);
+    text-decoration: underline;
+}
+
+.content :deep(a) {
+    display: inline;
+    color: var(--bg-color);
+    background-color: var(--fg-color);
+}
+
+.content :deep(a:hover) {
+    text-decoration: underline;
+}
+
+.content :deep(:is(ul, li)) {
+    margin-left: 9px;
+    padding: unset;
+    list-style-type: square;
+}
+
+.content :deep(code) {
+    background-color: black;
+    color: chartreuse;
 }
 </style>

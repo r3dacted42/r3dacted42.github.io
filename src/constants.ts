@@ -1,5 +1,5 @@
-export const snapX = 15;
-export const snapY = 22;
+export const snapX = 11;
+export const snapY = 18;
 export const shadowW = 10;
 export const barHeight = 22;
 export const minWindowWidth = snapX * 21;
