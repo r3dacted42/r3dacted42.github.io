@@ -1,31 +1,17 @@
 {
   "name": "r3dacted42.github.io",
-  "private": true,
-  "version": "0.0.0",
   "type": "module",
+  "version": "0.0.1",
   "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc -b && vite build",
-    "fetch:projects": "tsx scripts/fetch-projects.ts",
-    "preview": "vite preview",
-    "deploy": "gh-pages -d dist"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
   },
   "dependencies": {
-    "@vueuse/components": "^13.5.0",
-    "@vueuse/core": "^13.5.0",
-    "gh-pages": "^6.3.0",
-    "marked": "^16.3.0",
-    "pinia": "^3.0.3",
-    "vue": "^3.5.17"
-  },
-  "devDependencies": {
-    "@types/node": "^24.3.0",
-    "@vitejs/plugin-vue": "^6.0.0",
-    "@vue/tsconfig": "^0.7.0",
-    "dotenv": "^17.2.2",
-    "tsx": "^4.20.5",
-    "typescript": "~5.8.3",
-    "vite": "^7.0.0",
-    "vue-tsc": "^2.2.10"
+    "@astrojs/mdx": "^4.3.13",
+    "@astrojs/vue": "^5.1.3",
+    "astro": "^5.16.4",
+    "vue": "^3.5.25"
   }
 }

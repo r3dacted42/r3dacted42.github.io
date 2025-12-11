@@ -1,0 +1,97 @@
+---
+import type { TimeSpanData } from "../assets/aboutData";
+
+interface Props {
+  data: TimeSpanData[];
+}
+
+const { data } = Astro.props;
+---
+
+<div class="all-spans">
+  {
+    data.map((d) => (
+      <Fragment>
+        <div class="time-period">
+          <code>{d.end}</code>
+          <div class="spacer" />
+          <code>{d.begin}</code>
+        </div>
+        <div class="content">
+          <h3>{d.title}</h3>
+          <em>{d.subtitle}</em>
+          {Array.isArray(d.description) ? (
+            <ul>
+              {d.description.map((l) => (
+                <li>{l}</li>
+              ))}
+            </ul>
+          ) : (
+            <span>{d.description}</span>
+          )}
+        </div>
+      </Fragment>
+    ))
+  }
+</div>
+
+<style>
+  .all-spans {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.5rem;
+    border-left: 1px solid var(--tx);
+    padding-left: 0.5rem;
+  }
+
+  .all-spans::before {
+    content: "⌃";
+    font-size: 1.5rem;
+    position: absolute;
+    top: -0.3rem;
+    left: -0.45rem;
+  }
+
+  .time-period {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .spacer {
+      min-height: 1.2rem;
+      width: 0;
+      flex-grow: 1;
+      border-left: 1px solid var(--tx);
+    }
+  }
+
+  .time-period::before {
+    content: "─";
+    position: absolute;
+    top: 50%;
+    left: -0.5rem;
+    transform: translate(-50%, -50%);
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+
+    h3 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+    }
+
+    span,
+    ul {
+      margin-top: 0.3rem;
+    }
+
+    span,
+    ul > li {
+      color: var(--tx-2);
+    }
+  }
+</style>

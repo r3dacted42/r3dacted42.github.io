@@ -1,0 +1,54 @@
+---
+const allRoutes = [
+  { href: "/", title: "home" },
+  { href: "/projects/", title: "projects" },
+  { href: "/blog/", title: "blog" },
+];
+
+const pathname = Astro.originPathname;
+const routes = allRoutes.map(r => ({
+  ...r,
+  active: r.href === pathname,
+}));
+---
+
+<nav id="nav-parent">
+  {
+    routes.map(({ href, title, active }) => (
+      <a href={href} title={title} class={active ? "active" : undefined}>
+        <code>{title}</code>
+      </a>
+    ))
+  }
+</nav>
+
+<style>
+  nav {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: start;
+    align-items: center;
+  }
+
+  a {
+    text-decoration: none;
+    padding: 0.3rem 0.7rem;
+    border-radius: 1.3rem;
+    border: 1px solid var(--tx);
+    transition: all 300ms ease-in-out;
+  }
+
+  a:hover {
+    color: var(--bg);
+    background-color: var(--tx);
+  }
+
+  a.active {
+    color: var(--bg);
+    background-color: var(--tx-2);
+    border-color: var(--tx-2);
+    pointer-events: none;
+  }
+</style>

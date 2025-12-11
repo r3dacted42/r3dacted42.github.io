@@ -1,0 +1,51 @@
+---
+import "../style.css";
+import Navigation from "../components/Navigation.astro";
+import Footer from "../components/Footer.astro";
+import { exp, edu } from "../assets/aboutData";
+import TimeSpan from "../components/TimeSpan.astro";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Priyansh Agrahari</title>
+    <meta name="description" content="Priyansh Agrahari's website" />
+  </head>
+  <body>
+    <header>
+      <h2 class="cursive">Hi, I'm Priyansh Agrahari :)</h2>
+      <Navigation />
+    </header>
+
+    <main>
+      <p>
+        I enjoy building stuff <i class="fa-solid fa-screwdriver-wrench"></i>,
+        nature <i class="fa-solid fa-leaf"></i> and minimalism <i
+          class="fa-regular fa-square-full"></i>.
+      </p>
+      <p>Welcome to my site!</p>
+
+      <h3 class="cursive">Work Experience</h3>
+      <TimeSpan data={exp} />
+
+      <h3 class="cursive">Education</h3>
+      <TimeSpan data={edu} />
+    </main>
+
+    <Footer />
+  </body>
+</html>
+
+<style>
+  i.fa-leaf {
+    transition: color 300ms ease-in-out;
+  }
+
+  i.fa-leaf:hover {
+    color: rgb(135, 154, 57);
+  }
+</style>

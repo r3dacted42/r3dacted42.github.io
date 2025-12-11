@@ -1,0 +1,56 @@
+---
+const links = [
+  {
+    href: "https://github.com/r3dacted42",
+    title: "github",
+    target: "_blank",
+    faIconClass: "fa-brands fa-github",
+  },
+  {
+    href: "https://linkedin.com/in/priyansh-agr/",
+    title: "linkedin",
+    target: "_blank",
+    faIconClass: "fa-brands fa-linkedin",
+  },
+  {
+    href: "mailto:priyansh.agr4@gmail.com",
+    title: "email",
+    faIconClass: "fa-solid fa-envelope",
+  },
+];
+---
+
+<footer>
+  {
+    links.map(({ href, title, target, faIconClass }) => (
+      <a href={href} title={title} aria-label={title} target={target}>
+        <i class={faIconClass} />
+      </a>
+    ))
+  }
+</footer>
+
+<style>
+  footer {
+    margin: 1rem 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 1rem;
+    border-top: 1px solid var(--tx-2);
+    padding-top: 0.5rem;
+  }
+
+  a {
+    i {
+      color: var(--tx-2);
+      transition: color 300ms ease-in-out;
+    }
+  }
+
+  a:hover {
+    i {
+      color: var(--tx);
+    }
+  }
+</style>
