@@ -5,7 +5,6 @@ import Footer from "../components/Footer.astro";
 
 const matches = import.meta.glob('./blog/*.mdx', { eager: true });
 const posts = Object.values(matches) as any[];
-console.log(posts);
 ---
 
 
@@ -28,7 +27,7 @@ console.log(posts);
       {
         posts.map(p => (
           <div>
-            <a href={p.url}>{p.frontmatter.title}</a>
+            <a href={p.url}>{p.frontmatter.title || p.title}</a>
           </div>
         ))
       }

@@ -9,6 +9,7 @@ const { data } = Astro.props;
 ---
 
 <div class="all-spans">
+  <i class="icon icon-up-open"></i>
   {
     data.map((d) => (
       <Fragment>
@@ -45,12 +46,12 @@ const { data } = Astro.props;
     padding-left: 0.5rem;
   }
 
-  .all-spans::before {
-    content: "⌃";
-    font-size: 1.5rem;
+  .icon {
     position: absolute;
-    top: -0.3rem;
-    left: -0.45rem;
+    width: 1rem;
+    height: 1rem;
+    top: -0.5rem;
+    left: -0.75rem;
   }
 
   .time-period {
@@ -86,12 +87,8 @@ const { data } = Astro.props;
 
     span,
     ul {
-      margin-top: 0.3rem;
-    }
-
-    span,
-    ul > li {
-      color: var(--tx-2);
+      padding-inline-start: 1rem;
+      margin: 0.3rem 0;
     }
   }
 </style>

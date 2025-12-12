@@ -4,27 +4,27 @@ const links = [
     href: "https://github.com/r3dacted42",
     title: "github",
     target: "_blank",
-    faIconClass: "fa-brands fa-github",
+    iconClass: "icon icon-github",
   },
   {
     href: "https://linkedin.com/in/priyansh-agr/",
     title: "linkedin",
     target: "_blank",
-    faIconClass: "fa-brands fa-linkedin",
+    iconClass: "icon icon-linkedin",
   },
   {
     href: "mailto:priyansh.agr4@gmail.com",
     title: "email",
-    faIconClass: "fa-solid fa-envelope",
+    iconClass: "icon icon-mail",
   },
 ];
 ---
 
 <footer>
   {
-    links.map(({ href, title, target, faIconClass }) => (
+    links.map(({ href, title, target, iconClass }) => (
       <a href={href} title={title} aria-label={title} target={target}>
-        <i class={faIconClass} />
+        <i class={iconClass} />
       </a>
     ))
   }

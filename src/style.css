@@ -1,19 +1,5 @@
-@import url(https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Fira+Code:wght@300..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap);
-@import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css);
-
-html,
-body {
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  max-width: 750px;
-  margin: 0 auto;
-  padding: 0 1rem;
-  color: var(--tx);
-  background-color: var(--bg);
-}
+@import url(/css/fonts.css);
+@import url(/css/icons.css);
 
 :root {
   --bg: rgb(255, 252, 240);
@@ -27,6 +13,24 @@ body {
     --tx-2: rgb(135, 133, 128);
     --tx: rgb(206, 205, 195);
   }
+}
+
+* {
+  transition: color, background-color 300ms ease-in-out;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  max-width: 750px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  color: var(--tx);
+  background-color: var(--bg);
 }
 
 a {
@@ -55,5 +59,5 @@ h1,
 h2,
 h3,
 .display {
-  font-family: "Playfair Display", sans-serif;
+  font-family: "Playfair Display", serif;
 }

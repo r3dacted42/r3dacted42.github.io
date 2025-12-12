@@ -8,6 +8,13 @@ export type TimeSpanData = {
 
 export const exp: TimeSpanData[] = [
   {
+    begin: "Jan 2026",
+    end: "Current",
+    title: "Rolls-Royce",
+    subtitle: "Software Engineering Intern",
+    description: "Idk yet lol, will update soon ;)",
+  },
+  {
     begin: "May 2025",
     end: "Jul 2025",
     title: "Oracle",

@@ -6,7 +6,7 @@ const allRoutes = [
 ];
 
 const pathname = Astro.originPathname;
-const routes = allRoutes.map(r => ({
+const routes = allRoutes.map((r) => ({
   ...r,
   active: r.href === pathname,
 }));
@@ -27,12 +27,11 @@ const routes = allRoutes.map(r => ({
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    gap: 1rem;
-    justify-content: start;
+    gap: 0.5rem;
     align-items: center;
   }
 
-  a {
+  a, button {
     text-decoration: none;
     padding: 0.3rem 0.7rem;
     border-radius: 1.3rem;
@@ -40,15 +39,15 @@ const routes = allRoutes.map(r => ({
     transition: all 300ms ease-in-out;
   }
 
-  a:hover {
+  a:hover, button:hover {
     color: var(--bg);
     background-color: var(--tx);
+    border-radius: 0.3rem;
   }
 
   a.active {
     color: var(--bg);
-    background-color: var(--tx-2);
-    border-color: var(--tx-2);
+    background-color: var(--tx);
     pointer-events: none;
   }
 </style>
