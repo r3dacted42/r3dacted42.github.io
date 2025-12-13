@@ -1,0 +1,77 @@
+---
+slug: "animated-accordion-no-js"
+title: "Animated Accordions without JS"
+description: "Make an accordion with plain HTML/CSS with animations"
+updated: "2025-12-13"
+---
+
+While working on this site, I wound up using the HTML `<details>` and `<summary>` 
+tags. They're quite neat if you're trying to go by with as little client-side JS 
+as possible, but the only downside is that they don't support transitions out of 
+the box, or atleast it seems complicated.
+
+However, looking up the same online brought up some interesting results:  
+https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/::details-content  
+which demonstrates adding a smooth fade-in/out animations on the details content 
+using the `::details-content` pseudo selector (baseline 2025). This was very neat 
+and can be applied by simply following the guide they gave. It looked good but not 
+quite what I was looking for, which was a height-based animation.
+
+Opening up that pandora's box, I was reminded of the age-old problem of being unable 
+to animate to keywords like `auto`. However, this time around I stumbled upon this 
+excellent article:  
+https://dev.to/francescovetere/css-trick-transition-from-height-0-to-auto-21de  
+which has apparently been around for a while and I was just ignorant :D
+
+But the technique discussed there by setting `display: grid` and animating the 
+`grid-template-rows` didn't seem to work here (possible skill issue), but then I found
+this article:  
+https://developer.chrome.com/docs/css-ui/animate-to-height-auto  
+which addresses the exact problem of animating to `height: auto`! This was mind-blowing
+and this is how I used it to create a *pretty looking accordion*:
+
+```html
+<details>
+  <summary>Summary</summary>
+  <ul>
+    <li>First list item</li>
+    <li>Second list item</li>
+    <li>Third list item</li>
+  </ul>
+</details>
+```
+
+```css
+/* required for animating height:auto */
+:root {
+  interpolate-size: allow-keywords;
+}
+
+details::details-content {
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition:
+    height 300ms,
+    opacity 300ms,
+    content-visibility 300ms allow-discrete;
+}
+
+details[open]::details-content {
+  height: auto;
+  opacity: 1;
+  content-visibility: visible;
+}
+```
+
+...and that's it! See it in action below:
+
+<p class="codepen" data-height="300" data-default-tab="html,result" data-slug-hash="MYyRReY" data-pen-title="Better Accordion no JS" data-preview="true" data-editable="true" data-user="r3dacted42" style="height: 300px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;">
+      <span>See the Pen <a href="https://codepen.io/r3dacted42/pen/MYyRReY">
+  Better Accordion no JS</a> by priyansh agrahari (<a href="https://codepen.io/r3dacted42">@r3dacted42</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+      </p>
+      <script async src="https://public.codepenassets.com/embed/index.js"></script>
+
+Have suggestions? Please contact me using any of the links at the bottom of the page :)  
+Thanks for reading!

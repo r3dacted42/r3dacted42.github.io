@@ -2,11 +2,10 @@
 import "../style.css";
 import Navigation from "../components/Navigation.astro";
 import Footer from "../components/Footer.astro";
+import { getBlogs } from "../utils";
 
-const matches = import.meta.glob('./blog/*.mdx', { eager: true });
-const posts = Object.values(matches) as any[];
+const posts = getBlogs();
 ---
-
 
 <html lang="en">
   <head>
@@ -19,15 +18,15 @@ const posts = Object.values(matches) as any[];
   </head>
   <body>
     <header>
-      <h2 class="cursive">Priyansh Agrahari's Blog</h2>
+      <h1>Priyansh Agrahari's Blog</h1>
       <Navigation />
     </header>
 
     <main>
       {
-        posts.map(p => (
+        posts.map((p) => (
           <div>
-            <a href={p.url}>{p.frontmatter.title || p.title}</a>
+            <a href={`/blog/${p.frontmatter.slug}`}>{p.frontmatter.title}</a>
           </div>
         ))
       }

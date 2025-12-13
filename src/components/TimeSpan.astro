@@ -9,7 +9,6 @@ const { data } = Astro.props;
 ---
 
 <div class="all-spans">
-  <i class="icon icon-up-open"></i>
   {
     data.map((d) => (
       <Fragment>
@@ -19,17 +18,21 @@ const { data } = Astro.props;
           <code>{d.begin}</code>
         </div>
         <div class="content">
-          <h3>{d.title}</h3>
-          <em>{d.subtitle}</em>
-          {Array.isArray(d.description) ? (
-            <ul>
-              {d.description.map((l) => (
-                <li>{l}</li>
-              ))}
-            </ul>
-          ) : (
-            <span>{d.description}</span>
-          )}
+          <details>
+            <summary>
+              <h3>{d.title}</h3>
+              <em>{d.subtitle}</em>
+            </summary>
+            {Array.isArray(d.description) ? (
+              <ul>
+                {d.description.map((l) => (
+                  <li>{l}</li>
+                ))}
+              </ul>
+            ) : (
+              <span>{d.description}</span>
+            )}
+          </details>
         </div>
       </Fragment>
     ))
@@ -42,16 +45,20 @@ const { data } = Astro.props;
     display: grid;
     grid-template-columns: auto 1fr;
     gap: 0.5rem;
-    border-left: 1px solid var(--tx);
+    border-left: 2px solid var(--tx);
     padding-left: 0.5rem;
   }
 
-  .icon {
+  .all-spans::before {
     position: absolute;
-    width: 1rem;
-    height: 1rem;
-    top: -0.5rem;
-    left: -0.75rem;
+    content: "";
+    width: 0.5rem;
+    height: 0.5rem;
+    border: 2px solid var(--tx);
+    border-bottom: none;
+    border-right: none;
+    transform-origin: right;
+    transform: rotateZ(45deg) translate(-25%, 75%);
   }
 
   .time-period {
@@ -69,16 +76,57 @@ const { data } = Astro.props;
   }
 
   .time-period::before {
-    content: "─";
+    content: "";
     position: absolute;
     top: 50%;
-    left: -0.5rem;
-    transform: translate(-50%, -50%);
+    left: 0;
+    width: 0.5rem;
+    border: 2px solid var(--tx);
+    border-width: 2px 0 0 0;
+    transform: translate(-100%, -50%);
   }
 
   .content {
     display: flex;
     flex-direction: column;
+
+    details::details-content {
+      height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition:
+        height 300ms ease-in-out,
+        opacity 300ms ease-in-out,
+        content-visibility 300ms allow-discrete;
+    }
+    details[open]::details-content {
+      height: auto;
+      opacity: 1;
+      content-visibility: visible;
+    }
+    summary {
+      position: relative;
+    }
+    summary::marker {
+      content: none;
+    }
+    summary::after {
+      float: inline-end;
+      content: "";
+      width: 0.75rem;
+      height: 0.75rem;
+      border: 0px solid var(--tx);
+      transform-origin: center;
+      transform: rotateZ(45deg);
+
+      --border-width: 4px;
+      border-radius: var(--border-width);
+      border-width: 0 var(--border-width) var(--border-width) 0;
+      transition: border-width 300ms ease-in-out;
+    }
+    details[open] summary::after {
+      border-width: var(--border-width) 0 0 var(--border-width);
+    }
 
     h3 {
       margin-top: 0;

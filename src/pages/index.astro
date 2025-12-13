@@ -2,7 +2,7 @@
 import "../style.css";
 import Navigation from "../components/Navigation.astro";
 import Footer from "../components/Footer.astro";
-import { exp, edu } from "../assets/aboutData";
+import { exp, edu } from "../config/aboutData";
 import TimeSpan from "../components/TimeSpan.astro";
 ---
 
@@ -17,35 +17,21 @@ import TimeSpan from "../components/TimeSpan.astro";
   </head>
   <body>
     <header>
-      <h2 class="cursive">Hi, I'm Priyansh Agrahari :)</h2>
+      <h1>Hi, I'm Priyansh Agrahari :)</h1>
       <Navigation />
     </header>
 
     <main>
-      <p>
-        I enjoy building stuff <i class="icon icon-tools"></i>,
-        nature <i class="icon icon-leaf"></i> and minimalism <i
-          class="icon icon-circle"></i>.
-      </p>
+      <p>I enjoy working with software, nature and minimalism.</p>
       <p>Welcome to my site!</p>
 
-      <h3 class="cursive">Work Experience</h3>
+      <h2>Work Experience</h2>
       <TimeSpan data={exp} />
 
-      <h3 class="cursive">Education</h3>
+      <h2>Education</h2>
       <TimeSpan data={edu} />
     </main>
 
     <Footer />
   </body>
 </html>
-
-<style>
-  i.icon-leaf {
-    transition: color 300ms ease-in-out;
-  }
-
-  i.icon-leaf:hover {
-    color: rgb(135, 154, 57);
-  }
-</style>

@@ -1,0 +1,46 @@
+---
+import "../../style.css";
+import Footer from "../../components/Footer.astro";
+import Navigation from "../../components/Navigation.astro";
+import { getProjects } from "../../utils";
+
+export function getStaticPaths() {
+  return getProjects().map((p) => ({
+    params: { slug: p.frontmatter.slug },
+  }));
+}
+
+const projects = getProjects();
+const { slug } = Astro.params;
+const post = projects.find((p) => p.frontmatter.slug === slug)!;
+const { frontmatter, Content } = post;
+const { title, description, updated } = frontmatter;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <style is:global>
+      img {
+        max-width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>{title}</h1>
+      <Navigation />
+    </header>
+
+    <main>
+      <Content />
+    </main>
+
+    <Footer />
+  </body>
+</html>
