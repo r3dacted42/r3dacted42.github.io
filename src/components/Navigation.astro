@@ -16,7 +16,7 @@ const routes = allRoutes.map((r) => ({
   {
     routes.map(({ href, title, active }) => (
       <a href={href} title={title} class={active ? "active" : undefined}>
-        <code>{title}</code>
+        {title}
       </a>
     ))
   }
@@ -42,7 +42,7 @@ const routes = allRoutes.map((r) => ({
   a:hover {
     color: var(--bg);
     background-color: var(--tx);
-    border-radius: 0.3rem;
+    border-radius: 0.2rem;
   }
 
   a.active {

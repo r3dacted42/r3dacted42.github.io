@@ -8,12 +8,14 @@
   --bg-2: rgb(242, 240, 229);
   --tx-2: rgb(135, 133, 128);
   --tx: rgb(28, 27, 26);
+  --code: rgb(94, 64, 157);
 
   @media (prefers-color-scheme: dark) {
     --bg: rgb(16, 15, 15);
     --bg-2: rgb(28, 27, 26);
     --tx-2: rgb(135, 133, 128);
     --tx: rgb(206, 205, 195);
+    --code: rgb(135, 154, 57);
   }
 }
 
@@ -34,7 +36,15 @@ body {
   padding: 0 1rem;
   color: var(--tx);
   background-color: var(--bg);
-  font-family: "Atkinson Hyperlegible", sans-serif;
+  font-family: "Atkinson Hyperlegible", "fallback for Atkinson Hyperlegible";
+}
+
+@font-face {
+  font-family: "fallback for Atkinson Hyperlegible";
+  src: local("Arial");
+  ascent-override: 95%;
+  descent-override: 29%;
+  line-gap-override: 0%;
 }
 
 a {
@@ -52,17 +62,37 @@ header {
   margin: 1rem 0;
 }
 
-/* *:not(i) {
-} */
+code,
+pre {
+  font-family: "Fira Code", "fallback for Fira Code" !important;
+  color: var(--code);
+  padding: 0 0.2rem;
+  border-radius: 0.2rem;
+}
 
-pre,
-code {
-  font-family: "Fira Code", monospace !important;
+:not(pre)>code {
+  background-color: var(--bg-2);
+}
+
+@font-face {
+  font-family: "fallback for Fira Code";
+  src: local("Courier New");
+  ascent-override: 99%;
+  descent-override: 32.2%;
+  line-gap-override: 0%;
 }
 
 h1,
 h2,
 h3,
 .display {
-  font-family: "Playfair Display", serif;
+  font-family: "Playfair Display", "fallback for Playfair Display";
+}
+
+@font-face {
+  font-family: "fallback for Playfair Display";
+  src: local("Times New Roman");
+  ascent-override: 108.2%;
+  descent-override: 25.1%;
+  line-gap-override: 0%;
 }

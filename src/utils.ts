@@ -5,6 +5,8 @@ type Post = {
     slug: string;
     title: string;
     description: string;
+    imgSrc: string;
+    keywords: string[];
     updated: string;
   };
   getHeadings: () => {

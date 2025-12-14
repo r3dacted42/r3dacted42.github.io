@@ -1,5 +1,5 @@
 ---
-import type { TimeSpanData } from "../assets/aboutData";
+import type { TimeSpanData } from "../config/aboutData";
 
 interface Props {
   data: TimeSpanData[];
@@ -13,9 +13,9 @@ const { data } = Astro.props;
     data.map((d) => (
       <Fragment>
         <div class="time-period">
-          <code>{d.end}</code>
+          <small>{d.end}</small>
           <div class="spacer" />
-          <code>{d.begin}</code>
+          <small>{d.begin}</small>
         </div>
         <div class="content">
           <details>

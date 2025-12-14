@@ -3,6 +3,7 @@ import "../style.css";
 import Navigation from "../components/Navigation.astro";
 import Footer from "../components/Footer.astro";
 import { getBlogs } from "../utils";
+import LinkPreview from "../components/LinkPreview.astro";
 
 const posts = getBlogs();
 ---
@@ -23,15 +24,72 @@ const posts = getBlogs();
     </header>
 
     <main>
-      {
-        posts.map((p) => (
-          <div>
-            <a href={`/blog/${p.frontmatter.slug}`}>{p.frontmatter.title}</a>
-          </div>
-        ))
-      }
+      <div class="posts-grid">
+        {
+          posts.map((p) => (
+            <div class="entry-container">
+              <a class="blog-entry" href={`/blog/${p.frontmatter.slug}`}>
+                <span class="title">{p.frontmatter.title}</span>
+                <span>{p.frontmatter.description}</span>
+                <small>{p.frontmatter.updated}</small>
+              </a>
+            </div>
+          ))
+        }
+      </div>
     </main>
 
     <Footer />
   </body>
 </html>
+
+<style>
+  .posts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+
+    @media (max-width: 500px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .entry-container {
+    border: 1px solid var(--tx-2);
+    border-radius: 0.5rem;
+    padding: 0;
+    margin: 0;
+  }
+
+  .blog-entry {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    padding: 0.5rem;
+    border: 1px solid transparent;
+    border-radius: 0.5rem;
+    position: relative;
+    background-color: var(--bg);
+    transform-origin: left;
+    transition:
+      transform 300ms ease-in-out,
+      border-color 300ms ease-in-out;
+
+    .title {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    small {
+      color: var(--tx-2);
+    }
+  }
+  .blog-entry:hover {
+    transform: translate(0.3rem, -0.2rem) rotateZ(-1deg);
+    border-color: var(--tx);
+  }
+
+  .entry-container:has(.blog-entry:hover) {
+    background-color: var(--tx);
+  }
+</style>
