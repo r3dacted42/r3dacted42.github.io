@@ -1,4 +1,3 @@
-@import url(/css/fonts.css);
 @import url(/css/icons.css);
 
 :root {
@@ -36,15 +35,7 @@ body {
   padding: 0 1rem;
   color: var(--tx);
   background-color: var(--bg);
-  font-family: "Atkinson Hyperlegible", "fallback for Atkinson Hyperlegible";
-}
-
-@font-face {
-  font-family: "fallback for Atkinson Hyperlegible";
-  src: local("Arial");
-  ascent-override: 95%;
-  descent-override: 29%;
-  line-gap-override: 0%;
+  font-family: "Atkinson Hyperlegible", sans-serif;
 }
 
 a {
@@ -64,7 +55,7 @@ header {
 
 code,
 pre {
-  font-family: "Fira Code", "fallback for Fira Code" !important;
+  font-family: "Victor Mono", monospace;
   color: var(--code);
   padding: 0 0.2rem;
   border-radius: 0.2rem;
@@ -74,25 +65,9 @@ pre {
   background-color: var(--bg-2);
 }
 
-@font-face {
-  font-family: "fallback for Fira Code";
-  src: local("Courier New");
-  ascent-override: 99%;
-  descent-override: 32.2%;
-  line-gap-override: 0%;
-}
-
 h1,
 h2,
 h3,
 .display {
-  font-family: "Playfair Display", "fallback for Playfair Display";
-}
-
-@font-face {
-  font-family: "fallback for Playfair Display";
-  src: local("Times New Roman");
-  ascent-override: 108.2%;
-  descent-override: 25.1%;
-  line-gap-override: 0%;
+  font-family: "Noto Serif Display", serif;
 }
