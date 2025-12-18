@@ -2,7 +2,8 @@
 import "../../style.css";
 import Footer from "../../components/Footer.astro";
 import Navigation from "../../components/Navigation.astro";
-import { getProjects } from "../../utils";
+import { getDate, getProjects } from "../../utils";
+import LinkPreview from "../../components/LinkPreview.astro";
 
 export function getStaticPaths() {
   return getProjects().map((p) => ({
@@ -14,7 +15,7 @@ const projects = getProjects();
 const { slug } = Astro.params;
 const post = projects.find((p) => p.frontmatter.slug === slug)!;
 const { frontmatter, Content } = post;
-const { title, description, updated } = frontmatter;
+const { title, description, ghUrl, updated } = frontmatter;
 ---
 
 <html lang="en">
@@ -35,6 +36,10 @@ const { title, description, updated } = frontmatter;
     <header>
       <h1>{title}</h1>
       <Navigation />
+      <p>
+        <small>{getDate(updated)}</small>
+      </p>
+      <LinkPreview href={ghUrl} title={`r3dacted42/${slug} on GitHub`} />
     </header>
 
     <main>
@@ -44,3 +49,5 @@ const { title, description, updated } = frontmatter;
     <Footer />
   </body>
 </html>
+
+<style></style>

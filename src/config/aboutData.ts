@@ -12,7 +12,7 @@ export const exp: TimeSpanData[] = [
     end: "Current",
     title: "Rolls-Royce",
     subtitle: "Software Engineering Intern",
-    description: "Idk yet lol, will update soon ;)",
+    description: "TBA!",
   },
   {
     begin: "May 2025",

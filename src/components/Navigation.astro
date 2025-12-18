@@ -3,6 +3,7 @@ const allRoutes = [
   { href: "/", title: "home" },
   { href: "/projects/", title: "projects" },
   { href: "/blog/", title: "blog" },
+  { href: "/about/", title: "about" },
 ];
 
 const pathname = Astro.originPathname;
@@ -27,7 +28,7 @@ const routes = allRoutes.map((r) => ({
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 0.3rem;
     align-items: center;
   }
 

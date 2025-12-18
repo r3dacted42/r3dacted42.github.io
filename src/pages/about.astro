@@ -2,6 +2,8 @@
 import "../style.css";
 import Navigation from "../components/Navigation.astro";
 import Footer from "../components/Footer.astro";
+import TimeSpan from "../components/TimeSpan.astro";
+import { exp, edu } from "../config/aboutData";
 ---
 
 <html lang="en">
@@ -10,20 +12,21 @@ import Footer from "../components/Footer.astro";
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
-    <title>Priyansh Agrahari</title>
-    <meta name="description" content="Priyansh Agrahari's website" />
+    <title>About - Priyansh Agrahari</title>
+    <meta name="description" content="Priyansh Agrahari's About Page" />
   </head>
   <body>
     <header>
-      <h1>Hi, I'm Priyansh Agrahari :)</h1>
+      <h1>About</h1>
       <Navigation />
     </header>
 
     <main>
-      <p>Welcome to my site!</p>
-      <p>I love cats 😸, nature 🌲, and minimalism &#xFFFD;.</p>
-      <p>Building software is fun<span title="frustrating sometimes, but a learning opportunity nonetheless">*</span>!</p>
-      <p>I'm currently a second-year M.Tech student at <a href="https://iiitb.ac.in" target="_blank">IIITB</a>.</p>
+      <h2>Work Experience</h2>
+      <TimeSpan data={exp} />
+
+      <h2>Education</h2>
+      <TimeSpan data={edu} />
     </main>
 
     <Footer />

@@ -13,7 +13,8 @@ const links = [
     iconClass: "icon icon-linkedin",
   },
   {
-    href: "mailto:priyansh.agr4@gmail.com",
+    action:
+      "window.location.href = 'mailto:?subject=Hello 👋&body=psst! send email to priyansh.agr4 [at] gmail [dot] com'",
     title: "email",
     iconClass: "icon icon-mail",
   },
@@ -22,11 +23,19 @@ const links = [
 
 <footer>
   {
-    links.map(({ href, title, target, iconClass }) => (
-      <a href={href} title={title} aria-label={title} target={target}>
-        <i class={iconClass} />
-      </a>
-    ))
+    links.map(({ href, action, title, target, iconClass }) => {
+      if (href)
+        return (
+          <a href={href} title={title} aria-label={title} target={target}>
+            <i class={iconClass} />
+          </a>
+        );
+      return (
+        <button onclick={action}>
+          <i class={iconClass} />
+        </button>
+      );
+    })
   }
 </footer>
 
@@ -41,14 +50,23 @@ const links = [
     padding-top: 0.5rem;
   }
 
-  a {
+  a,
+  button {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+
     i {
       color: var(--tx-2);
       transition: color 300ms ease-in-out;
     }
   }
 
-  a:hover {
+  a:hover,
+  button:hover {
+    cursor: pointer;
+
     i {
       color: var(--tx);
     }

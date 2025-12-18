@@ -52,8 +52,8 @@ const { data } = Astro.props;
   .all-spans::before {
     position: absolute;
     content: "";
-    width: 0.5rem;
-    height: 0.5rem;
+    width: 0.6rem;
+    height: 0.6rem;
     border: 2px solid var(--tx);
     border-bottom: none;
     border-right: none;
@@ -68,10 +68,11 @@ const { data } = Astro.props;
     align-items: center;
 
     .spacer {
+      position: relative;
       min-height: 1.2rem;
       width: 0;
       flex-grow: 1;
-      border-left: 1px solid var(--tx);
+      border-left: 2px solid var(--tx);
     }
   }
 
@@ -80,10 +81,10 @@ const { data } = Astro.props;
     position: absolute;
     top: 50%;
     left: 0;
-    width: 0.5rem;
+    width: calc(50% + 0.6rem);
     border: 2px solid var(--tx);
     border-width: 2px 0 0 0;
-    transform: translate(-100%, -50%);
+    transform: translate(-0.6rem, -50%);
   }
 
   .content {

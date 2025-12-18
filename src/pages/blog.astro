@@ -2,10 +2,13 @@
 import "../style.css";
 import Navigation from "../components/Navigation.astro";
 import Footer from "../components/Footer.astro";
-import { getBlogs } from "../utils";
-import LinkPreview from "../components/LinkPreview.astro";
+import { getBlogs, getDate } from "../utils";
 
-const posts = getBlogs();
+const posts = getBlogs().sort((a, b) => {
+  const d1 = new Date(a.frontmatter.updated);
+  const d2 = new Date(b.frontmatter.updated);
+  return d2.getTime() - d1.getTime();
+});
 ---
 
 <html lang="en">
@@ -19,7 +22,7 @@ const posts = getBlogs();
   </head>
   <body>
     <header>
-      <h1>Priyansh Agrahari's Blog</h1>
+      <h1>Blog</h1>
       <Navigation />
     </header>
 
@@ -31,7 +34,7 @@ const posts = getBlogs();
               <a class="blog-entry" href={`/blog/${p.frontmatter.slug}`}>
                 <span class="title">{p.frontmatter.title}</span>
                 <span>{p.frontmatter.description}</span>
-                <small>{p.frontmatter.updated}</small>
+                <small>{getDate(p.frontmatter.updated)}</small>
               </a>
             </div>
           ))

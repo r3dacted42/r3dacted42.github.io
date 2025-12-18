@@ -2,9 +2,21 @@
 import "../style.css";
 import Navigation from "../components/Navigation.astro";
 import Footer from "../components/Footer.astro";
-import { getProjects } from "../utils";
+import { getDate, getProjects } from "../utils";
 
-const posts = getProjects();
+const posts = getProjects().sort((a, b) => {
+  const d1 = new Date(a.frontmatter.updated);
+  const d2 = new Date(b.frontmatter.updated);
+  return d2.getTime() - d1.getTime();
+});
+
+const devIconSvg = async (iconCode: string) => {
+  const res = await fetch(
+    `https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${iconCode}/${iconCode}-plain.svg`,
+  );
+  if (!res.ok) return "";
+  return res.text();
+};
 ---
 
 <html lang="en">
@@ -18,22 +30,86 @@ const posts = getProjects();
   </head>
   <body>
     <header>
-      <h1>Priyansh Agrahari's Projects</h1>
+      <h1>Projects</h1>
       <Navigation />
     </header>
 
     <main>
-      {
-        posts.map((p) => (
-          <div>
-            <a href={`/projects/${p.frontmatter.slug}`}>
-              {p.frontmatter.title}
-            </a>
-          </div>
-        ))
-      }
+      <div class="projects-list">
+        {
+          posts.map((p) => (
+            <div>
+              <a class="project-entry" href={`/projects/${p.frontmatter.slug}`}>
+                <span class="title">{p.frontmatter.title}</span>
+                <span>{p.frontmatter.description}</span>
+                <span class="devicons">
+                  {p.frontmatter.devIcons.map((icon) => (
+                    <Fragment set:html={devIconSvg(icon)} />
+                  ))}
+                </span>
+                <small>{getDate(p.frontmatter.updated)}</small>
+              </a>
+            </div>
+          ))
+        }
+      </div>
     </main>
 
     <Footer />
   </body>
 </html>
+
+<style>
+  .projects-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .project-entry {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background-color: var(--bg);
+    filter: invert(0);
+    transition: filter 300ms ease-in-out;
+
+    .title {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .devicons {
+      margin: 0.3rem 0;
+      display: flex;
+      flex-direction: row;
+      gap: 0.3rem;
+
+      svg {
+        height: 2.5rem;
+        aspect-ratio: 1;
+        fill: var(--tx);
+        /* stroke: var(--tx); */
+        stroke-width: 1px;
+        vector-effect: non-scaling-stroke;
+
+        * {
+          fill: var(--tx);
+          stroke-width: 1px;
+          vector-effect: non-scaling-stroke;
+        }
+      }
+    }
+
+    small {
+      color: var(--tx-2);
+    }
+  }
+
+  .project-entry:hover {
+    filter: invert(1);
+  }
+</style>

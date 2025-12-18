@@ -2,7 +2,7 @@
 import "../../style.css";
 import Footer from "../../components/Footer.astro";
 import Navigation from "../../components/Navigation.astro";
-import { getBlogs } from "../../utils";
+import { getBlogs, getDate } from "../../utils";
 
 export function getStaticPaths() {
   return getBlogs().map((p) => ({
@@ -30,6 +30,9 @@ const { title, description, updated } = frontmatter;
     <header>
       <h1>{title}</h1>
       <Navigation />
+      <p>
+        <small>{getDate(updated)}</small>
+      </p>
     </header>
 
     <main>
