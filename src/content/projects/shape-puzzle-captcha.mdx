@@ -1,0 +1,51 @@
+---
+slug: "shape-puzzle-captcha"
+title: "shape-puzzle-captcha"
+description: "An interactive 3D Web Component captcha UI inspired by the (in)famous 'Square Hole' meme"
+ghUrl: "https://github.com/r3dacted42/shape-puzzle-captcha"
+skillIconsUrl: "https://skillicons.dev/icons?i=lit,threejs"
+updated: "2026-04-07"
+---
+import './style/shape-puzzle-captcha.css';
+
+This project uses Lit to create a custom web component called `<shape-puzzle-captcha>`. 
+
+## Overview
+
+The component renders a 3D scene using Three.js and users must correctly (or incorrectly) 
+drop the shapes into the holes to solve the captcha. Below is a demo of the component.
+Interact with the shapes and see if you can solve the puzzle!
+
+You can use the controls (thanks [Tweakpane](https://tweakpane.github.io/docs/)) to 
+customize the captcha's behavior and appearance.
+
+<fieldset class="demo">
+  <legend>DEMO</legend>
+  
+  <shape-puzzle-captcha
+    event-key="captcha"
+    auto-dark=""
+  ></shape-puzzle-captcha>
+
+  <div class="controls"></div>
+</fieldset>
+
+Interaction is facilitated by using pointer events followed by raycasting to determine which 
+shape the user is trying to drag.
+Predefined states for the rotation are defined for when the meshes are resting and 
+have been dragged over the box, enabling realtime animations using a custom Animation handler. 
+
+It uses Constructive Solid Geometry (CSG) to create the holes in the box the first time the popup
+is opened, and then caches the resulting geometry for future use; hence, the sequence of holes may
+be different each time you reload the page.
+
+Once the user clicks the "Verify" button, different events are fired depending on whether all the 
+shapes are correctly placed or not, allowing you to handle the verification logic in your application.
+This component is only meant to be a fun to use UI and does not implement any actual security 
+measures, so it should not be used as the only captcha solution.
+
+For a detailed explanation of its usage, check out the GitHub repository linked above. 
+The project is open source and contributions are welcome!
+
+<script type="module" src="https://unpkg.com/@r3dacted42/shape-puzzle-captcha@latest/dist/bundle/shape-puzzle-captcha.js"></script>
+<script type="module" src="https://r3dacted42.github.io/shape-puzzle-captcha/index.js"></script>

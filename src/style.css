@@ -9,6 +9,10 @@
   --tx: rgb(28, 27, 26);
   --code: rgb(94, 64, 157);
 
+  --font-serif: "Noto Serif Display", serif;
+  --font-sans: "Atkinson Hyperlegible", sans-serif;
+  --font-mono: "Victor Mono", monospace;
+
   @media (prefers-color-scheme: dark) {
     --bg: rgb(16, 15, 15);
     --bg-2: rgb(28, 27, 26);
@@ -19,7 +23,9 @@
 }
 
 * {
-  transition: color, background-color 300ms ease-in-out;
+  transition:
+    color,
+    background-color 300ms ease-in-out;
   font-display: swap;
 }
 
@@ -35,7 +41,7 @@ body {
   padding: 0 1rem;
   color: var(--tx);
   background-color: var(--bg);
-  font-family: "Atkinson Hyperlegible", sans-serif;
+  font-family: var(--font-sans);
 }
 
 a {
@@ -55,13 +61,13 @@ header {
 
 code,
 pre {
-  font-family: "Victor Mono", monospace;
+  font-family: var(--font-mono);
   color: var(--code);
   padding: 0 0.2rem;
   border-radius: 0.2rem;
 }
 
-:not(pre)>code {
+:not(pre) > code {
   background-color: var(--bg-2);
 }
 
@@ -69,5 +75,5 @@ h1,
 h2,
 h3,
 .display {
-  font-family: "Noto Serif Display", serif;
+  font-family: var(--font-serif);
 }

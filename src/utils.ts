@@ -11,7 +11,7 @@ type ProjectFrontmatter = {
   title: string;
   description: string;
   ghUrl: string;
-  devIcons: string[];
+  skillIconsUrl: string;
   updated: string;
 };
 

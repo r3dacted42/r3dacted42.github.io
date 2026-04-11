@@ -10,11 +10,9 @@ const posts = getProjects().sort((a, b) => {
   return d2.getTime() - d1.getTime();
 });
 
-const devIconSvg = async (iconCode: string) => {
-  const res = await fetch(
-    `https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${iconCode}/${iconCode}-plain.svg`,
-  );
-  if (!res.ok) return "";
+const iconSvg = async (url: string) => {
+  const res = await fetch(url);
+  if (!res.ok) return "?";
   return res.text();
 };
 ---
@@ -42,10 +40,8 @@ const devIconSvg = async (iconCode: string) => {
               <a class="project-entry" href={`/projects/${p.frontmatter.slug}`}>
                 <span class="title">{p.frontmatter.title}</span>
                 <span>{p.frontmatter.description}</span>
-                <span class="devicons">
-                  {p.frontmatter.devIcons.map((icon) => (
-                    <Fragment set:html={devIconSvg(icon)} />
-                  ))}
+                <span class="icons">
+                  <Fragment set:html={iconSvg(p.frontmatter.skillIconsUrl)} />
                 </span>
                 <small>{getDate(p.frontmatter.updated)}</small>
               </a>
@@ -73,34 +69,25 @@ const devIconSvg = async (iconCode: string) => {
     text-decoration: none;
     padding: 0.5rem;
     border-radius: 0.5rem;
+    color: var(--tx);
     background-color: var(--bg);
-    filter: invert(0);
-    transition: filter 300ms ease-in-out;
+    transition: color 300ms ease-in-out,
+      background-color 300ms ease-in-out;
 
     .title {
       font-size: 1.2rem;
       font-weight: 700;
     }
 
-    .devicons {
+    .icons {
       margin: 0.3rem 0;
       display: flex;
       flex-direction: row;
       gap: 0.3rem;
 
       svg {
-        height: 2.5rem;
-        aspect-ratio: 1;
-        fill: var(--tx);
-        /* stroke: var(--tx); */
-        stroke-width: 1px;
-        vector-effect: non-scaling-stroke;
-
-        * {
-          fill: var(--tx);
-          stroke-width: 1px;
-          vector-effect: non-scaling-stroke;
-        }
+        filter: grayscale(1);
+        transition: filter 300ms ease-in-out;
       }
     }
 
@@ -110,6 +97,11 @@ const devIconSvg = async (iconCode: string) => {
   }
 
   .project-entry:hover {
-    filter: invert(1);
+    color: var(--bg);
+    background-color: var(--tx);
+
+    svg {
+      filter: grayscale(0);
+    }
   }
 </style>
