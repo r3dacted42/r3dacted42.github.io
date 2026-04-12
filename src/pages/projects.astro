@@ -40,9 +40,7 @@ const iconSvg = async (url: string) => {
               <a class="project-entry" href={`/projects/${p.frontmatter.slug}`}>
                 <span class="title">{p.frontmatter.title}</span>
                 <span>{p.frontmatter.description}</span>
-                <span class="icons">
-                  <Fragment set:html={iconSvg(p.frontmatter.skillIconsUrl)} />
-                </span>
+                <Fragment set:html={iconSvg(p.frontmatter.skillIconsUrl)} />
                 <small>{getDate(p.frontmatter.updated)}</small>
               </a>
             </div>
@@ -79,16 +77,10 @@ const iconSvg = async (url: string) => {
       font-weight: 700;
     }
 
-    .icons {
-      margin: 0.3rem 0;
-      display: flex;
-      flex-direction: row;
-      gap: 0.3rem;
-
-      svg {
-        filter: grayscale(1);
-        transition: filter 300ms ease-in-out;
-      }
+    & > :global(svg) {
+      margin-top: 0.3em;
+      filter: grayscale(100%);
+      transition: filter 300ms ease-in-out;
     }
 
     small {
@@ -96,11 +88,12 @@ const iconSvg = async (url: string) => {
     }
   }
 
+
   .project-entry:hover {
     color: var(--bg);
     background-color: var(--tx);
 
-    svg {
+    & > :global(svg) {
       filter: grayscale(0);
     }
   }

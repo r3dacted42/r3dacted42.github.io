@@ -1,5 +1,6 @@
 ---
 import { getLinkPreview } from "link-preview-js";
+import extlinkIcon from "../assets/svg/extlink.svg?raw";
 
 interface Props {
   href: string;
@@ -28,9 +29,9 @@ try {
 
 <a href={href} target="_blank">
   <div class="content">
+    <Fragment set:html={extlinkIcon} />
     <span class="title">
       {_title}
-      <i class="icons icon-link-ext"></i>
     </span>
     <span>{_description}</span>
     <div style="flex-grow: 1;"></div>
@@ -61,6 +62,7 @@ try {
   }
 
   a .content {
+    position: relative;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -97,14 +99,18 @@ try {
     background: var(--bg);
   }
 
-  i {
-    opacity: 0;
+  .content > :global(svg) {
     position: absolute;
-    float: inline-end;
+    right: 0;
+    top: 0.5rem;
+    height: 1em;
+    width: 1em;
+    fill: var(--tx-2);
+    opacity: 0;
     transition: opacity 300ms ease-in-out;
   }
 
-  a:hover i {
+  a:hover .content > :global(svg) {
     opacity: 1;
   }
 

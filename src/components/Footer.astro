@@ -1,38 +1,42 @@
 ---
+import githubIcon from "../assets/svg/github.svg?raw";
+import linkedinIcon from "../assets/svg/linkedin.svg?raw";
+import emailIcon from "../assets/svg/email.svg?raw";
+
 const links = [
   {
     href: "https://github.com/r3dacted42",
     title: "github",
     target: "_blank",
-    iconClass: "icon icon-github",
+    svg: githubIcon,
   },
   {
     href: "https://linkedin.com/in/priyansh-agr/",
     title: "linkedin",
     target: "_blank",
-    iconClass: "icon icon-linkedin",
+    svg: linkedinIcon,
   },
   {
     action:
       "window.location.href = 'mailto:?subject=Hello 👋&body=psst! send email to priyansh.agr4 [at] gmail [dot] com'",
     title: "email",
-    iconClass: "icon icon-mail",
+    svg: emailIcon,
   },
 ];
 ---
 
 <footer>
   {
-    links.map(({ href, action, title, target, iconClass }) => {
+    links.map(({ href, action, title, target, svg }) => {
       if (href)
         return (
           <a href={href} title={title} aria-label={title} target={target}>
-            <i class={iconClass} />
+            <Fragment set:html={svg} />
           </a>
         );
       return (
         <button onclick={action}>
-          <i class={iconClass} />
+          <Fragment set:html={svg} />
         </button>
       );
     })
@@ -48,27 +52,32 @@ const links = [
     gap: 1rem;
     border-top: 1px solid var(--tx-2);
     padding-top: 0.5rem;
-  }
 
-  a,
-  button {
-    background: none;
-    border: none;
-    padding: 0;
-    margin: 0;
+    a,
+    button {
+      background: none;
+      border: none;
+      padding: 0;
+      margin: 0;
+      min-width: 0;
+      display: flex;
+      align-items: center;
 
-    i {
-      color: var(--tx-2);
-      transition: color 300ms ease-in-out;
+      :global(svg) {
+        height: 1.2em;
+        width: 1.2em;
+        fill: var(--tx-2);
+        transition: fill 300ms ease-in-out;
+      }
     }
-  }
 
-  a:hover,
-  button:hover {
-    cursor: pointer;
+    a:hover,
+    button:hover {
+      cursor: pointer;
 
-    i {
-      color: var(--tx);
+      :global(svg) {
+        fill: var(--tx);
+      }
     }
   }
 </style>
