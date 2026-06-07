@@ -1,0 +1,53 @@
+---
+import "../style.css";
+import Navigation from "../components/Navigation.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <title>PROG_CALC Privacy Policy</title>
+    <meta name="description" content="PROG_CALC App Privacy Policy Page" />
+  </head>
+  <body>
+    <header>
+      <h1>PROG_CALC Privacy Policy</h1>
+      <Navigation />
+    </header>
+
+    <main>
+      <h3>Privacy Policy for PROG_CALC</h3>
+      <ol>
+        <li>
+          <h4>Information Collection and Use</h4>
+          PROG_CALC does not collect, store, share, or transmit any personally identifiable
+          information or personal data. All calculations and memory storage (via SharedPreferences)
+          occur entirely locally on the user's device.
+        </li>
+        <li>
+          <h4>Third-Party Access</h4>
+          This app does not use any third-party analytics, advertising frameworks,
+          or external APIs that track user behavior.
+        </li>
+        <li>
+          <h4>Changes to This Privacy Policy</h4>
+          We may update our Privacy Policy from time to time. Thus, you are advised
+          to review this page periodically for any changes.
+        </li>
+        <li>
+          <h4>Contact Us</h4>
+          If you have any questions or suggestions about this Privacy Policy, please
+          contact <a href="mailto:priyansh.agr4@gmail.com"
+            >priyansh.agr4@gmail.com</a
+          >
+        </li>
+      </ol>
+    </main>
+
+    <Footer />
+  </body>
+</html>
