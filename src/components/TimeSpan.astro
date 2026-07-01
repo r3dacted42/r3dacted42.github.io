@@ -23,6 +23,7 @@ const { data } = Astro.props;
               <h3>{d.title}</h3>
               <em>{d.subtitle}</em>
             </summary>
+            <div>{d.location ? `Location: ${d.location}` : ''}</div>
             {Array.isArray(d.description) ? (
               <ul>
                 {d.description.map((l) => (
