@@ -41,7 +41,33 @@ const links = [
       );
     })
   }
+  <div id="hit-count"><div>hits</div><div>000000</div></div>
 </footer>
+
+<script is:inline>
+  fetch(
+    "https://hitscounter.dev/api/hit?output=json&url=https%3A%2F%2Fr3dacted42.github.io&tz=Asia%2FKolkata",
+  )
+    .then((r) => r.json())
+    .then((o) => {
+      const targetCount = o.total_hits;
+      const duration = 500;
+      const element = document.querySelector("#hit-count>div:nth-child(2)");
+      let startTime = null;
+
+      function animateCount(currentTime) {
+        if (!startTime) startTime = currentTime;
+        const timeElapsed = currentTime - startTime;
+        const progress = Math.min(timeElapsed / duration, 1);
+        const currentValue = Math.floor(progress * targetCount);
+        element.textContent = currentValue.toString().padStart(6, "0");
+        if (timeElapsed < duration) {
+          requestAnimationFrame(animateCount);
+        }
+      }
+      requestAnimationFrame(animateCount);
+    });
+</script>
 
 <style>
   footer {
@@ -77,6 +103,22 @@ const links = [
 
       :global(svg) {
         fill: var(--tx);
+      }
+    }
+
+    #hit-count {
+      display: flex;
+      color: var(--tx);
+      font-family: var(--font-mono);
+      border: 1px solid var(--tx);
+
+      & > div {
+        padding: 0px 2px;
+      }
+
+      & > div:nth-child(1) {
+        background-color: var(--tx);
+        color: var(--bg);
       }
     }
   }

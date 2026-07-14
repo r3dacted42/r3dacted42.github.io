@@ -9,8 +9,8 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/mdx": "^5.0.3",
-    "astro": "^6.1.5",
+    "@astrojs/mdx": "^7.0.3",
+    "astro": "^7.0.9",
     "fontless": "^0.1.0",
     "link-preview-js": "^4.0.0",
     "vue": "^3.5.25"
